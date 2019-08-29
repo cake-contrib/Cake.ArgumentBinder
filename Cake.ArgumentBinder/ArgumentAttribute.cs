@@ -18,4 +18,15 @@ namespace Cake.ArgumentBinder
         {
         }
     }
+
+    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
+    public class IntegerArgumentAttribute : BaseIntegerAttribute
+    {
+        // ---------------- Constructor ----------------
+
+        public IntegerArgumentAttribute( string arg ) :
+            base( arg )
+        {
+        }
+    }
 }

@@ -23,7 +23,8 @@ namespace Cake.ArgumentBinder
             List<Type> argumentTypes = new List<Type>
             {
                 typeof(StringArgumentAttribute),
-                typeof(IntegerArgumentAttribute)
+                typeof(IntegerArgumentAttribute),
+                typeof(BooleanArgumentAttribute)
             };
 
             Type type = typeof( T );
@@ -104,6 +105,7 @@ namespace Cake.ArgumentBinder
 
                 this.Success = true;
                 this.TryStringArguments();
+                this.TryBooleanArguments();
                 this.TryIntegerArguments();
             }
 
@@ -159,20 +161,68 @@ namespace Cake.ArgumentBinder
                         {
                             cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
                         }
+                        else if ( argumentAttribute.Required )
+                        {
+                            this.AddError( "Argument not specified, but is required: " + argumentAttribute.ArgName );
+                            continue;
+                        }
                         else
                         {
                             cakeArg = argumentAttribute.DefaultValue;
                         }
 
-                        if ( argumentAttribute.Required && string.IsNullOrWhiteSpace( cakeArg ) )
+                        info.SetValue(
+                            instance,
+                            cakeArg
+                        );
+                    }
+                }
+            }
+
+            private void TryBooleanArguments()
+            {
+                foreach ( PropertyInfo info in this.properties )
+                {
+                    BooleanArgumentAttribute argumentAttribute = info.GetCustomAttribute<BooleanArgumentAttribute>();
+                    if ( argumentAttribute != null )
+                    {
+                        string argumentErrors = argumentAttribute.TryValidate();
+                        if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        {
+                            this.AddError( argumentErrors );
+                            continue;
+                        }
+
+                        bool? value = null;
+                        string cakeArg;
+                        if ( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        {
+                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
+                            if ( bool.TryParse( cakeArg, out bool result ) )
+                            {
+                                value = result;
+                            }
+                            else
+                            {
+                                this.AddError( "Argument is not a boolean value: " + argumentAttribute.ArgName );
+                                continue;
+                            }
+                        }
+
+                        if ( argumentAttribute.Required && ( value == null ) )
                         {
                             this.AddError( "Argument not specified, but is required: " + argumentAttribute.ArgName );
                             continue;
                         }
 
+                        if ( value == null )
+                        {
+                            value = argumentAttribute.DefaultValue;
+                        }
+
                         info.SetValue(
                             instance,
-                            cakeArg
+                            value.Value
                         );
                     }
                 }

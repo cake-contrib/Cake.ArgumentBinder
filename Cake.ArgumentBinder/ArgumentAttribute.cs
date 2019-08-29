@@ -29,4 +29,15 @@ namespace Cake.ArgumentBinder
         {
         }
     }
+
+    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
+    public class BooleanArgumentAttribute : BaseBooleanAttribute
+    {
+        // ---------------- Constructor ----------------
+
+        public BooleanArgumentAttribute( string arg ) :
+            base( arg )
+        {
+        }
+    }
 }

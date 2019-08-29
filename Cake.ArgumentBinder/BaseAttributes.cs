@@ -56,15 +56,99 @@ namespace Cake.ArgumentBinder
             builder.AppendLine( "\t --" + this.ArgName );
             builder.AppendLine( "\t\t" + this.Description );
             builder.AppendLine( "\t\tType: String" );
-            if ( string.IsNullOrWhiteSpace( this.DefaultValue ) == false )
+            if ( this.Required )
             {
-                builder.AppendLine( "\t\tDefaulted to: " + this.DefaultValue );
+                builder.AppendLine( "\t\tThis argument is Required." );
             }
             else
             {
-                builder.AppendLine( "\t\tDefaulted to: (Empty String)" );
+                if ( string.IsNullOrWhiteSpace( this.DefaultValue ) == false )
+                {
+                    builder.AppendLine( "\t\tDefaulted to: " + this.DefaultValue );
+                }
+                else
+                {
+                    builder.AppendLine( "\t\tDefaulted to: (Empty String)" );
+                }
             }
-            builder.AppendLine( "\t\tRequired: " + this.Required );
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Validates this object.  Returns <see cref="string.Empty"/>
+        /// if nothing is wrong, otherwise this returns an error message.
+        /// </summary>
+        internal string TryValidate()
+        {
+            StringBuilder builder = new StringBuilder();
+            if ( string.IsNullOrWhiteSpace( this.ArgName ) )
+            {
+                builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
+            }
+            if ( string.IsNullOrWhiteSpace( this.Description ) )
+            {
+                builder.AppendLine( nameof( this.Description ) + " can not be null, empty, or whitespace." );
+            }
+
+            return builder.ToString();
+        }
+    }
+
+    public class BaseBooleanAttribute : Attribute
+    {
+        // ---------------- Constructor ----------------
+
+        protected BaseBooleanAttribute( string arg )
+        {
+            if ( string.IsNullOrWhiteSpace( arg ) )
+            {
+                throw new ArgumentNullException( nameof( arg ) );
+            }
+            this.ArgName = arg;
+            this.DefaultValue = false;
+            this.Description = string.Empty;
+            this.Required = false;
+        }
+
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// The default value of the argument; defaulted to false.
+        /// </summary>
+        public bool DefaultValue { get; set; }
+
+        /// <summary>
+        /// The argument name 
+        /// </summary>
+        public string ArgName { get; private set; }
+
+        /// <summary>
+        /// Description of what the argument does.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// If the value is not specified, this will fail validation.
+        /// </summary>
+        public bool Required { get; set; }
+
+        // ---------------- Functions ----------------
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine( "\t --" + this.ArgName );
+            builder.AppendLine( "\t\t" + this.Description );
+            builder.AppendLine( "\t\tType: Boolean" );
+            if ( this.Required )
+            {
+                builder.AppendLine( "\t\tThis argument is Required." );
+            }
+            else
+            {
+                builder.AppendLine( "\t\tDefault Value: " + this.DefaultValue );
+            }
 
             return builder.ToString();
         }
@@ -155,8 +239,14 @@ namespace Cake.ArgumentBinder
             builder.AppendLine( "\t --" + this.ArgName );
             builder.AppendLine( "\t\t" + this.Description );
             builder.AppendLine( "\t\tType: Integer" );
-            builder.AppendLine( "\t\tDefaulted to: " + this.DefaultValue );
-            builder.AppendLine( "\t\tRequired: " + this.Required );
+            if ( this.Required )
+            {
+                builder.AppendLine( "\t\tThis argument is Required." );
+            }
+            else
+            {
+                builder.AppendLine( "\t\tDefault Value: " + this.DefaultValue );
+            }
             builder.AppendLine( "\t\tMinimum Value: " + this.Min );
             builder.AppendLine( "\t\tMaximum Value: " + this.Max );
 

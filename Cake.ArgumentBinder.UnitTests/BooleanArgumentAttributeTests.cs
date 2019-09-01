@@ -125,6 +125,29 @@ namespace Cake.ArgumentBinder.UnitTests
             Assert.IsTrue( uut.BoolProperty );
         }
 
+        /// <summary>
+        /// Ensures that if we pass in an argument that is not a boolean,
+        /// we get an exception.
+        /// </summary>
+        [Test]
+        public void FormatExceptionTest()
+        {
+            this.cakeArgs.Setup(
+                m => m.HasArgument( optionalArgName )
+            ).Returns( true );
+
+            this.cakeArgs.Setup(
+                m => m.GetArgument( optionalArgName )
+            ).Returns( "lolImNotABool" );
+
+            AggregateException e = Assert.Throws<AggregateException>(
+                () => ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object )
+            );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is ArgumentFormatException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument

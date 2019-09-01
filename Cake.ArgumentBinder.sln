@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ArgumentBinder", "Cake.ArgumentBinder\Cake.ArgumentBinder.csproj", "{3B361678-B5AC-4A4A-9374-88E5256A6BE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.ArgumentBinder", "Cake.ArgumentBinder\Cake.ArgumentBinder.csproj", "{3B361678-B5AC-4A4A-9374-88E5256A6BE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ArgumentBinder.UnitTests", "Cake.ArgumentBinder.UnitTests\Cake.ArgumentBinder.UnitTests.csproj", "{5324DD06-6C64-425B-9879-9F3938E72903}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{3B361678-B5AC-4A4A-9374-88E5256A6BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B361678-B5AC-4A4A-9374-88E5256A6BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B361678-B5AC-4A4A-9374-88E5256A6BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5324DD06-6C64-425B-9879-9F3938E72903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5324DD06-6C64-425B-9879-9F3938E72903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5324DD06-6C64-425B-9879-9F3938E72903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5324DD06-6C64-425B-9879-9F3938E72903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

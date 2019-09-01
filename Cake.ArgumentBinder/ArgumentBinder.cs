@@ -72,9 +72,7 @@ namespace Cake.ArgumentBinder
 
             if ( binderHelper.Success == false )
             {
-                throw new InvalidOperationException(
-                    "Errors when validating arguments: " + Environment.NewLine + binderHelper.Errors
-                );
+                throw binderHelper.GetException();
             }
 
             return instance;
@@ -86,7 +84,7 @@ namespace Cake.ArgumentBinder
         {
             // --------------- Fields ----------------
 
-            private readonly StringBuilder errorString;
+            private readonly List<Exception> exceptions;
 
             private readonly ICakeContext cakeContext;
 
@@ -98,12 +96,11 @@ namespace Cake.ArgumentBinder
 
             public ArgumentBinderHelper( T instance, IEnumerable<PropertyInfo> properties, ICakeContext cakeContext )
             {
-                this.errorString = new StringBuilder();
+                this.exceptions = new List<Exception>();
                 this.cakeContext = cakeContext;
                 this.properties = properties;
                 this.instance = instance;
 
-                this.Success = true;
                 this.TryStringArguments();
                 this.TryBooleanArguments();
                 this.TryIntegerArguments();
@@ -115,23 +112,11 @@ namespace Cake.ArgumentBinder
             /// True if there were no errors during argument parsing,
             /// otherwise false.
             /// </summary>
-            public bool Success { get; private set; }
-
-            /// <summary>
-            /// Error message, <see cref="string.Empty" /> if there are no errors.
-            /// </summary>
-            public string Errors
+            public bool Success
             {
                 get
                 {
-                    if ( this.Success )
-                    {
-                        return string.Empty;
-                    }
-                    else
-                    {
-                        return errorString.ToString();
-                    }
+                    return this.exceptions.Count == 0;
                 }
             }
 
@@ -139,7 +124,12 @@ namespace Cake.ArgumentBinder
 
             public override string ToString()
             {
-                return this.Errors;
+                return this.GetException().ToString();
+            }
+
+            public AggregateException GetException()
+            {
+                return new AggregateException( "Errors when parsing arguments", this.exceptions );
             }
 
             private void TryStringArguments()
@@ -152,7 +142,9 @@ namespace Cake.ArgumentBinder
                         string argumentErrors = argumentAttribute.TryValidate();
                         if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
-                            this.AddError( argumentErrors );
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
                             continue;
                         }
 
@@ -163,7 +155,9 @@ namespace Cake.ArgumentBinder
                         }
                         else if ( argumentAttribute.Required )
                         {
-                            this.AddError( "Argument not specified, but is required: " + argumentAttribute.ArgName );
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
                             continue;
                         }
                         else
@@ -189,7 +183,9 @@ namespace Cake.ArgumentBinder
                         string argumentErrors = argumentAttribute.TryValidate();
                         if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
-                            this.AddError( argumentErrors );
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
                             continue;
                         }
 
@@ -204,14 +200,18 @@ namespace Cake.ArgumentBinder
                             }
                             else
                             {
-                                this.AddError( "Argument is not a boolean value: " + argumentAttribute.ArgName );
+                                this.exceptions.Add(
+                                    new ArgumentFormatException( typeof( bool ), argumentAttribute.ArgName )
+                                );
                                 continue;
                             }
                         }
 
                         if ( argumentAttribute.Required && ( value == null ) )
                         {
-                            this.AddError( "Argument not specified, but is required: " + argumentAttribute.ArgName );
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
                             continue;
                         }
 
@@ -238,7 +238,9 @@ namespace Cake.ArgumentBinder
                         string argumentErrors = argumentAttribute.TryValidate();
                         if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
-                            this.AddError( argumentErrors );
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
                             continue;
                         }
 
@@ -251,12 +253,16 @@ namespace Cake.ArgumentBinder
                             {
                                 if ( result > argumentAttribute.Max )
                                 {
-                                    this.AddError( $"Argument is greater than maximum of {argumentAttribute.Max}: {argumentAttribute.ArgName}" );
+                                    this.exceptions.Add(
+                                        new ArgumentTooLargeException( argumentAttribute.Max.ToString(), argumentAttribute.ArgName )
+                                    );
                                     continue;
                                 }
                                 if ( result < argumentAttribute.Min )
                                 {
-                                    this.AddError( $"Argument is less than minimum of {argumentAttribute.Min}: {argumentAttribute.ArgName}" );
+                                    this.exceptions.Add(
+                                        new ArgumentTooSmallException( argumentAttribute.Min.ToString(), argumentAttribute.ArgName )
+                                    );
                                     continue;
                                 }
 
@@ -264,14 +270,18 @@ namespace Cake.ArgumentBinder
                             }
                             else
                             {
-                                this.AddError( "Argument is not an integer: " + argumentAttribute.ArgName );
+                                this.exceptions.Add(
+                                    new ArgumentFormatException( typeof( int ), argumentAttribute.ArgName )
+                                );
                                 continue;
                             }
                         }
 
                         if ( argumentAttribute.Required && ( value == null ) )
                         {
-                            this.AddError( "Argument not specified, but is required: " + argumentAttribute.ArgName );
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
                             continue;
                         }
 
@@ -286,12 +296,6 @@ namespace Cake.ArgumentBinder
                         );
                     }
                 }
-            }
-
-            private void AddError( string errorMessage )
-            {
-                this.Success = false;
-                this.errorString.AppendLine( errorMessage );
             }
         }
     }

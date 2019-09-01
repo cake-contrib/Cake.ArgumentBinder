@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Cake.ArgumentBinder</id>
+    <version>0.0.0</version> <!-- Set during build. -->
+    <authors>Seth Hendrick</authors>
+    <description>Bind Cake arguments to classes via Attributes</description>
+    <summary>This allows uses of the Cake build system to convert comamnd-line arguments to classes, instead of having to deal with creating classes themselves.</summary>
+    <licenseUrl>https://github.com/xforever1313/Filesing/blob/master/LICENSE_1_0.txt</licenseUrl>
+    <projectUrl>https://github.com/xforever1313/Cake.ArgumentBinder</projectUrl>
+    <!--<iconUrl></iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <repository type="git" url="https://github.com/xforever1313/Cake.ArgumentBinder"/>
+    <copyright>Copyright (c) Seth Hendrick</copyright>
+    <tags>xforever1313 cake argument binder reflection attributes</tags>
+  </metadata>
+  <files>
+  </files>
+</package>

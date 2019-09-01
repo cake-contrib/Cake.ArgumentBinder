@@ -1,3 +1,7 @@
+#tool "nuget:?package=NUnit.ConsoleRunner"
+#tool "nuget:?package=OpenCover"
+#tool "nuget:?package=ReportGenerator"
+
 const string buildTarget = "build";
 const string unitTestTarget = "unit_test";
 const string buildReleaseTarget = "build_release";
@@ -5,9 +9,12 @@ const string nugetPackTarget = "nuget_pack";
 const string makeDistTarget = "make_dist";
 
 string target = Argument( "target", buildTarget );
+bool runCoverage = Argument<bool>( "code_coverage", false );
 
 FilePath sln = new FilePath( "./Cake.ArgumentBinder.sln" );
 DirectoryPath distFolder = MakeAbsolute( new DirectoryPath( "./dist" ) );
+DirectoryPath coverageFolder = MakeAbsolute( new DirectoryPath( "./CodeCoverage" ) );
+DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults" ) );
 
 // This is the version of this software,
 // update before making a new release.
@@ -36,12 +43,46 @@ Task( buildTarget )
 
 Task( unitTestTarget )
 .Does(
-    () =>
+    ( context ) =>
     {
-        Information( "TODO" );
+        if( runCoverage )
+        {
+            EnsureDirectoryExists( coverageFolder );
+            CleanDirectory( coverageFolder );
+
+            OpenCoverSettings settings = new OpenCoverSettings
+            {
+                Register = "user",
+                ReturnTargetCodeOffset = 0,
+                OldStyle = true // This is needed or MissingMethodExceptions get thrown everywhere for some reason.
+            };
+            settings.WithFilter( "+[Cake.ArgumentBinder]*" );
+
+            FilePath output = coverageFolder.CombineWithFilePath( "coverage.xml" );
+
+            OpenCover( c => RunUnitTests( c ), output, settings );
+
+            ReportGenerator( output, coverageFolder );
+        }
+        else
+        {
+            RunUnitTests( context );
+        }
     }
 ).Description( "Runs all Unit Tests" )
 .IsDependentOn( buildTarget );
+
+private void RunUnitTests( ICakeContext context )
+{
+    DotNetCoreTestSettings settings = new DotNetCoreTestSettings
+    {
+        NoBuild = true,
+        NoRestore = true,
+        Configuration = "Debug"
+    };
+
+    context.DotNetCoreTest( "./Cake.ArgumentBinder.UnitTests/Cake.ArgumentBinder.UnitTests.csproj", settings );
+}
 
 Task( buildReleaseTarget )
 .Does(

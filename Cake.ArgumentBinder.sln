@@ -7,6 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.ArgumentBinder", "Cake
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ArgumentBinder.UnitTests", "Cake.ArgumentBinder.UnitTests\Cake.ArgumentBinder.UnitTests.csproj", "{5324DD06-6C64-425B-9879-9F3938E72903}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8F449D2-05CC-4E69-BBA4-3E8620EDAB82}"
+	ProjectSection(SolutionItems) = preProject
+		build.cake = build.cake
+		LICENSE = LICENSE
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

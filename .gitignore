@@ -6,3 +6,4 @@ tools/
 .vs
 .vscode
 dist/
+CodeCoverage/

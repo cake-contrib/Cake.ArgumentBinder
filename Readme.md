@@ -161,3 +161,7 @@ TroubleShooting
 --------
 * Ensure that in the classes that you are binding arguments to, you include the using statement ```using Cake.ArgumentBinder;```,
   otherwise the compiler won't be able to find the attributes, and produce a lot of errors.
+
+License
+--------
+To be consistent with Cake itself, Cake.ArgumentBinder is released under the MIT license.  This includes the examples.

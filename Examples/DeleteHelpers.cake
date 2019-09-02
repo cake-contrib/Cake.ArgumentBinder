@@ -130,6 +130,7 @@ Task( "delete_files" )
     ( context ) =>
     {
         DeleteHelpersConfig config = ArgumentBinder.FromArguments<DeleteHelpersConfig>( context );
+        context.Information( ArgumentBinder.ConfigToStringHelper( config ) );
         DeleteHelpers.DeleteFiles( context, config );
     }
 )
@@ -140,6 +141,7 @@ Task( "delete_dirs" )
     ( context ) =>
     {
         DeleteHelpersConfig config = ArgumentBinder.FromArguments<DeleteHelpersConfig>( context );
+        context.Information( ArgumentBinder.ConfigToStringHelper( config ) );
         DeleteHelpers.DeleteDirectories( context, config );
     }
 )

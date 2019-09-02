@@ -20,36 +20,20 @@ namespace Cake.ArgumentBinder
             builder.AppendLine( taskDescription );
             bool addedArgumentString = false;
 
-            List<Type> argumentTypes = new List<Type>
-            {
-                typeof(StringArgumentAttribute),
-                typeof(IntegerArgumentAttribute),
-                typeof(BooleanArgumentAttribute)
-            };
-
             Type type = typeof( T );
             IEnumerable<PropertyInfo> properties = type.GetProperties();
             foreach ( PropertyInfo info in properties )
             {
-                bool propertyDone = false;
-                foreach ( Type argumentType in argumentTypes )
-                {
-                    Attribute argumentAttribute = info.GetCustomAttribute( argumentType );
-                    if ( argumentAttribute != null )
-                    {
-                        if ( addedArgumentString == false )
-                        {
-                            builder.AppendLine( "- Arguments:" );
-                            addedArgumentString = true;
-                        }
-                        builder.AppendLine( argumentAttribute.ToString() );
-                        propertyDone = true;
-                        break;
-                    }
-                }
+                Attribute argumentAttribute = info.GetCustomAttribute<Attribute>();
 
-                if ( propertyDone )
+                if ( argumentAttribute is IReadOnlyArgumentAttribute )
                 {
+                    if ( addedArgumentString == false )
+                    {
+                        builder.AppendLine( "- Arguments:" );
+                        addedArgumentString = true;
+                    }
+                    builder.AppendLine( argumentAttribute.ToString() );
                     continue;
                 }
             }

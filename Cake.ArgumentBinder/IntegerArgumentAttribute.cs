@@ -9,7 +9,7 @@ using System;
 namespace Cake.ArgumentBinder
 {
     [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public class IntegerArgumentAttribute : BaseIntegerAttribute
+    public class IntegerArgumentAttribute : BaseIntegerAttribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Constructor ----------------
 

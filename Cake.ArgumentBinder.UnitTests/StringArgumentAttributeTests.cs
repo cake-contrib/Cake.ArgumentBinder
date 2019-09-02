@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright Seth Hendrick 2019.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -12,13 +12,15 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.UnitTests
 {
     [TestFixture]
-    public class BooleanArgumentAttributeTests
+    public class StringArgumentAttributeTests
     {
         // ---------------- Fields ----------------
 
-        private const string requiredArgName = "required_bool_arg";
+        private const string requiredArgName = "required_str_arg";
 
-        private const string optionalArgName = "optional_bool_arg";
+        private const string optionalArgName = "optional_str_arg";
+
+        private const string defaultValue = "My String";
 
         private Mock<ICakeContext> cakeContext;
         private Mock<ICakeArguments> cakeArgs;
@@ -60,16 +62,18 @@ namespace Cake.ArgumentBinder.UnitTests
         [Test]
         public void HasRequiredArgumentTest()
         {
+            const string value = "Arg Value"; 
+
             this.cakeArgs.Setup(
                 m => m.HasArgument( requiredArgName )
             ).Returns( true );
 
             this.cakeArgs.Setup(
                 m => m.GetArgument( requiredArgName )
-            ).Returns( "true" );
+            ).Returns( value);
 
             RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
-            Assert.IsTrue( uut.BoolProperty );
+            Assert.AreEqual( value, uut.StringProperty );
         }
 
         /// <summary>
@@ -98,16 +102,18 @@ namespace Cake.ArgumentBinder.UnitTests
         [Test]
         public void SpecifiedOptionalArgumentTest()
         {
+            const string value = "My Value";
+
             this.cakeArgs.Setup(
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
             this.cakeArgs.Setup(
                 m => m.GetArgument( optionalArgName )
-            ).Returns( "false" );
+            ).Returns( value );
 
             OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
-            Assert.IsFalse( uut.BoolProperty );
+            Assert.AreEqual( value, uut.StringProperty );
         }
 
         /// <summary>
@@ -122,15 +128,15 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( false );
 
             OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
-            Assert.IsTrue( uut.BoolProperty );
+            Assert.AreEqual( defaultValue, uut.StringProperty );
         }
 
         /// <summary>
-        /// Ensures that if we pass in an argument that is not a boolean,
-        /// we get an exception.
+        /// Ensures that if we pass in an argument that is an empt string,
+        /// we do not get an exception.
         /// </summary>
         [Test]
-        public void FormatExceptionTest()
+        public void EmptyStringTest()
         {
             this.cakeArgs.Setup(
                 m => m.HasArgument( optionalArgName )
@@ -138,14 +144,10 @@ namespace Cake.ArgumentBinder.UnitTests
 
             this.cakeArgs.Setup(
                 m => m.GetArgument( optionalArgName )
-            ).Returns( "lolImNotABool" );
+            ).Returns( string.Empty );
 
-            AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object )
-            );
-
-            Assert.AreEqual( 1, e.InnerExceptions.Count );
-            Assert.IsTrue( e.InnerExceptions[0] is ArgumentFormatException );
+            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            Assert.AreEqual( string.Empty, uut.StringProperty );
         }
 
         /// <summary>
@@ -167,20 +169,20 @@ namespace Cake.ArgumentBinder.UnitTests
 
         private class RequiredArgument
         {
-            [BooleanArgument( requiredArgName, DefaultValue = true, Description = "A required boolean argument", Required = true )]
-            public bool BoolProperty { get; set; }
+            [StringArgument( requiredArgName, DefaultValue = defaultValue, Description = "A required boolean argument", Required = true )]
+            public string StringProperty { get; set; }
         }
 
         private class OptionalArgument
         {
-            [BooleanArgument( optionalArgName, DefaultValue = true, Description = "An optional argument", Required = false )]
-            public bool BoolProperty { get; set; }
+            [StringArgument( optionalArgName, DefaultValue = defaultValue, Description = "An optional argument", Required = false )]
+            public string StringProperty { get; set; }
         }
 
         private class EmptyArgument
         {
-            [BooleanArgument( "", DefaultValue = true, Description = "This shouldnt work.", Required = false )]
-            public bool BollProperty { get; set; }
+            [StringArgument( "", DefaultValue = "Should not work", Description = "This shouldnt work.", Required = false )]
+            public string StringProperty { get; set; }
         }
     }
 }

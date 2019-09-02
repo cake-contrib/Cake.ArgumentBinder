@@ -16,10 +16,6 @@ namespace Cake.ArgumentBinder
 
         protected BaseStringAttribute( string arg )
         {
-            if ( string.IsNullOrWhiteSpace( arg ) )
-            {
-                throw new ArgumentNullException( nameof( arg ) );
-            }
             this.ArgName = arg;
             this.DefaultValue = string.Empty;
             this.Description = string.Empty;
@@ -101,10 +97,6 @@ namespace Cake.ArgumentBinder
 
         protected BaseBooleanAttribute( string arg )
         {
-            if ( string.IsNullOrWhiteSpace( arg ) )
-            {
-                throw new ArgumentNullException( nameof( arg ) );
-            }
             this.ArgName = arg;
             this.DefaultValue = false;
             this.Description = string.Empty;
@@ -179,10 +171,6 @@ namespace Cake.ArgumentBinder
 
         protected BaseIntegerAttribute( string arg )
         {
-            if ( string.IsNullOrWhiteSpace( arg ) )
-            {
-                throw new ArgumentNullException( nameof( arg ) );
-            }
             this.ArgName = arg;
             this.DefaultValue = 0;
             this.Description = string.Empty;

@@ -9,17 +9,14 @@ using System.Text;
 
 namespace Cake.ArgumentBinder
 {
-    public class BaseIntegerAttribute : Attribute
+    public class BaseIntegerAttribute : BaseAttribute
     {
         // ---------------- Constructor ----------------
 
-        protected BaseIntegerAttribute( string arg )
+        protected BaseIntegerAttribute( string arg ) :
+            base( arg )
         {
-            this.ArgName = arg;
             this.DefaultValue = 0;
-            this.Description = string.Empty;
-            this.Required = false;
-            this.HasSecretValue = false;
             this.Min = 0;
             this.Max = int.MaxValue;
         }
@@ -37,14 +34,6 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public int DefaultValue { get; set; }
 
-        public string ArgName { get; private set; }
-
-        public string Description { get; set; }
-
-        public bool Required { get; set; }
-
-        public bool HasSecretValue { get; set; }
-
         /// <summary>
         /// The minimum acceptable value.  Defaulted to 0.
         /// If the argument is less than (equal to is okay) this value,
@@ -59,32 +48,30 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public int Max { get; set; }
 
+        protected override object BaseDefaultValue
+        {
+            get
+            {
+                return this.DefaultValue;
+            }
+        }
+
+        protected override Type BaseType
+        {
+            get
+            {
+                return typeof( int );
+            }
+        }
+
         // ---------------- Functions ----------------
 
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine( "\t --" + this.ArgName );
-            if ( string.IsNullOrEmpty( this.Description ) )
-            {
-                builder.AppendLine( "\t\t(No Description Given)." );
-            }
-            else
-            {
-                builder.AppendLine( "\t\t" + this.Description );
-            }
-            builder.AppendLine( "\t\tType: Integer" );
-            if ( this.Required )
-            {
-                builder.AppendLine( "\t\tThis argument is Required." );
-            }
-            else
-            {
-                builder.AppendLine( "\t\tDefault Value: " + this.DefaultValue );
-            }
+            this.ToString( builder );
             builder.AppendLine( "\t\tMinimum Value: " + this.Min );
             builder.AppendLine( "\t\tMaximum Value: " + this.Max );
-            builder.AppendLine( "\t\tValue is Secret: " + this.HasSecretValue );
 
             return builder.ToString();
         }

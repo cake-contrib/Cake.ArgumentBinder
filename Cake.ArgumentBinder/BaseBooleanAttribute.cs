@@ -9,17 +9,14 @@ using System.Text;
 
 namespace Cake.ArgumentBinder
 {
-    public class BaseBooleanAttribute : Attribute
+    public class BaseBooleanAttribute : BaseAttribute
     {
         // ---------------- Constructor ----------------
 
-        protected BaseBooleanAttribute( string arg )
+        protected BaseBooleanAttribute( string arg ) :
+            base( arg )
         {
-            this.ArgName = arg;
             this.DefaultValue = false;
-            this.Description = string.Empty;
-            this.Required = false;
-            this.HasSecretValue = false;
         }
 
         // ---------------- Properties ----------------
@@ -29,38 +26,28 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public bool DefaultValue { get; set; }
 
-        public string ArgName { get; private set; }
+        protected override object BaseDefaultValue
+        {
+            get
+            {
+                return this.DefaultValue;
+            }
+        }
 
-        public string Description { get; set; }
-
-        public bool Required { get; set; }
-
-        public bool HasSecretValue { get; set; }
+        protected override Type BaseType
+        {
+            get
+            {
+                return typeof( bool );
+            }
+        }
 
         // ---------------- Functions ----------------
 
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine( "\t --" + this.ArgName );
-            if ( string.IsNullOrEmpty( this.Description ) )
-            {
-                builder.AppendLine( "\t\t(No Description Given)." );
-            }
-            else
-            {
-                builder.AppendLine( "\t\t" + this.Description );
-            }
-            builder.AppendLine( "\t\tType: Boolean" );
-            if ( this.Required )
-            {
-                builder.AppendLine( "\t\tThis argument is Required." );
-            }
-            else
-            {
-                builder.AppendLine( "\t\tDefault Value: " + this.DefaultValue );
-            }
-            builder.AppendLine( "\t\tValue is Secret: " + this.HasSecretValue );
+            this.ToString( builder );
 
             return builder.ToString();
         }

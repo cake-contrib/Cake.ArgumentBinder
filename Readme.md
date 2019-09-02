@@ -10,6 +10,10 @@ to C# classes without having to do it manually.
 Honestly, for most users of Cake, this addin is probably overkill (even the cakefile for this project very project doesn't use it).
 If was designed for complex build environments with multiple Tasks and passed in configurations from a command-line.
 
+Packages
+--------
+[![NuGet](https://img.shields.io/nuget/v/Cake.ArgumentBinder.svg)](https://www.nuget.org/packages/Cake.ArgumentBinder/) 
+
 How it Works
 --------
 Let's say when invoking Cake, Cake needs several arguments from the user before it can execute.  In this example, it is deleting files from a directory.

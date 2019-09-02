@@ -18,7 +18,7 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public AttributeValidationException( PropertyInfo property, string message ) :
-            base( $"Errors when validating attribute on {property.DeclaringType.Name}.{property.Name}{Environment.NewLine}{message}." )
+            base( $"Errors when validating attribute on '{property.DeclaringType.Name}.{property.Name}'{Environment.NewLine}{message}." )
         {
         }
     }
@@ -32,7 +32,7 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public MissingRequiredArgumentException( string argumentName ) :
-            base( $"Argument '{argumentName} is required, but was never specified." )
+            base( $"Argument '{argumentName}' is required, but was never specified." )
         {
         }
     }
@@ -46,7 +46,7 @@ namespace Cake.ArgumentBinder
         // ----------------- Constructor ----------------
 
         public ArgumentFormatException( Type expectedType, string argumentName ) :
-            base( $"Could not convert value specified in argument '{argumentName}' to type {expectedType.Name}." )
+            base( $"Could not convert value specified in argument '{argumentName}' to type '{expectedType.Name}'." )
         {
         }
     }

@@ -14,6 +14,13 @@ namespace Cake.ArgumentBinder
 {
     public static class ArgumentBinder
     {
+        /// <summary>
+        /// Creates a Cake Description string that can be put into
+        /// a Task's Description function during a printout of "cake --showdescription".
+        /// </summary>
+        /// <typeparam name="T">The class to bind arguments to.</typeparam>
+        /// <param name="taskDescription">Top-level description of the task.</param>
+        /// <returns>A string of all of the argument's descriptions.</returns>
         public static string GetDescription<T>( string taskDescription )
         {
             StringBuilder builder = new StringBuilder();
@@ -41,6 +48,44 @@ namespace Cake.ArgumentBinder
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Helper function that creates a string representation of configured values
+        /// on a class that we can bind arguments to.
+        /// </summary>
+        /// <typeparam name="T">The type of class to bind arguments to.</typeparam>
+        /// <returns>A string that shows what the user passed into the class.</returns>
+        public static string ConfigToStringHelper<T>( T obj )
+        {
+            Type type = typeof( T );
+
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine( type.Name + "'s Configuration:" );
+
+            foreach ( PropertyInfo property in type.GetProperties() )
+            {
+                Attribute attr = property.GetCustomAttribute<Attribute>();
+                if ( attr is IReadOnlyArgumentAttribute argumentAttribute )
+                {
+                    if ( argumentAttribute.HasSecretValue )
+                    {
+                        builder.AppendLine( $"\t-{property.Name}: ******" );
+                    }
+                    else
+                    {
+                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj ).ToString()}" );
+                    }
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Creates an instance of a class that can bind arguments to.
+        /// </summary>
+        /// <typeparam name="T">The type of class to bind arguments to.</typeparam>
+        /// <param name="constructorArgs">Any constructor arguments for the config class.</param>
         public static T FromArguments<T>( this ICakeContext cakeContext, params object[] constructorArgs )
         {
             Type type = typeof( T );

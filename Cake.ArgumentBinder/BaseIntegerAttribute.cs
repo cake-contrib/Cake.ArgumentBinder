@@ -19,8 +19,8 @@ namespace Cake.ArgumentBinder
             this.DefaultValue = 0;
             this.Description = string.Empty;
             this.Required = false;
+            this.HasSecretValue = false;
             this.Min = 0;
-
             this.Max = int.MaxValue;
         }
 
@@ -37,20 +37,13 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public int DefaultValue { get; set; }
 
-        /// <summary>
-        /// The argument name 
-        /// </summary>
         public string ArgName { get; private set; }
 
-        /// <summary>
-        /// Description of what the argument does.
-        /// </summary>
         public string Description { get; set; }
 
-        /// <summary>
-        /// If the value is not specified, this will fail validation.
-        /// </summary>
         public bool Required { get; set; }
+
+        public bool HasSecretValue { get; set; }
 
         /// <summary>
         /// The minimum acceptable value.  Defaulted to 0.
@@ -91,6 +84,7 @@ namespace Cake.ArgumentBinder
             }
             builder.AppendLine( "\t\tMinimum Value: " + this.Min );
             builder.AppendLine( "\t\tMaximum Value: " + this.Max );
+            builder.AppendLine( "\t\tValue is Secret: " + this.HasSecretValue );
 
             return builder.ToString();
         }

@@ -24,5 +24,11 @@ namespace Cake.ArgumentBinder
         /// If the value is not specified, this will fail validation.
         /// </summary>
         bool Required { get; }
+
+        /// <summary>
+        /// Set to true if the value passed into the argument
+        /// should be hidden from any print-outs to the console.
+        /// </summary>
+        bool HasSecretValue { get; }
     }
 }

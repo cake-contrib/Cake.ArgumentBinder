@@ -19,6 +19,7 @@ namespace Cake.ArgumentBinder
             this.DefaultValue = false;
             this.Description = string.Empty;
             this.Required = false;
+            this.HasSecretValue = false;
         }
 
         // ---------------- Properties ----------------
@@ -28,20 +29,13 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public bool DefaultValue { get; set; }
 
-        /// <summary>
-        /// The argument name 
-        /// </summary>
         public string ArgName { get; private set; }
 
-        /// <summary>
-        /// Description of what the argument does.
-        /// </summary>
         public string Description { get; set; }
 
-        /// <summary>
-        /// If the value is not specified, this will fail validation.
-        /// </summary>
         public bool Required { get; set; }
+
+        public bool HasSecretValue { get; set; }
 
         // ---------------- Functions ----------------
 
@@ -66,6 +60,7 @@ namespace Cake.ArgumentBinder
             {
                 builder.AppendLine( "\t\tDefault Value: " + this.DefaultValue );
             }
+            builder.AppendLine( "\t\tValue is Secret: " + this.HasSecretValue );
 
             return builder.ToString();
         }

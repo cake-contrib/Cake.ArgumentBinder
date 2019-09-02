@@ -19,6 +19,9 @@ namespace Cake.ArgumentBinder
             this.DefaultValue = 0;
             this.Description = string.Empty;
             this.Required = false;
+            this.Min = 0;
+
+            this.Max = int.MaxValue;
         }
 
         // ---------------- Properties ----------------
@@ -69,7 +72,14 @@ namespace Cake.ArgumentBinder
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine( "\t --" + this.ArgName );
-            builder.AppendLine( "\t\t" + this.Description );
+            if ( string.IsNullOrEmpty( this.Description ) )
+            {
+                builder.AppendLine( "\t\t(No Description Given)." );
+            }
+            else
+            {
+                builder.AppendLine( "\t\t" + this.Description );
+            }
             builder.AppendLine( "\t\tType: Integer" );
             if ( this.Required )
             {
@@ -95,11 +105,6 @@ namespace Cake.ArgumentBinder
             if ( string.IsNullOrWhiteSpace( this.ArgName ) )
             {
                 builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
-            }
-
-            if ( string.IsNullOrWhiteSpace( this.Description ) )
-            {
-                builder.AppendLine( nameof( this.Description ) + " can not be null, empty, or whitespace." );
             }
 
             if ( this.Min > this.Max )

@@ -49,7 +49,14 @@ namespace Cake.ArgumentBinder
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine( "\t --" + this.ArgName );
-            builder.AppendLine( "\t\t" + this.Description );
+            if ( string.IsNullOrEmpty( this.Description ) )
+            {
+                builder.AppendLine( "\t\t(No Description Given)." );
+            }
+            else
+            {
+                builder.AppendLine( "\t\t" + this.Description );
+            }
             builder.AppendLine( "\t\tType: Boolean" );
             if ( this.Required )
             {
@@ -73,10 +80,6 @@ namespace Cake.ArgumentBinder
             if ( string.IsNullOrWhiteSpace( this.ArgName ) )
             {
                 builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
-            }
-            if ( string.IsNullOrWhiteSpace( this.Description ) )
-            {
-                builder.AppendLine( nameof( this.Description ) + " can not be null, empty, or whitespace." );
             }
 
             return builder.ToString();

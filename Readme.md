@@ -7,8 +7,8 @@ About
 This addin to [Cake](https://github.com/cake-build/cake), a C# build system, allows one to bind arguments passed into Cake
 to C# classes without having to do it manually.
 
-Honestly, for most users of Cake, this addin is probably overkill (even the cakefile for this project very project doesn't use it).
-If was designed for complex build environments with multiple Tasks and passed in configurations from a command-line.
+Honestly, for most users of Cake, this addin is probably overkill (even the cakefile for this very project doesn't use it).
+If was designed for complex, flexible, build environments with multiple Tasks and multiple configurations passed in from the command-line.
 
 Packages
 --------
@@ -16,7 +16,7 @@ Packages
 
 How it Works
 --------
-Let's say when invoking Cake, Cake needs several arguments from the user before it can execute.  In this example, it is deleting files from a directory.
+Let's say when invoking a target defined in Cake, the target requires several arguments from the user before it can execute.  In this example, it is deleting files from a directory.
 One option is to just parse the arguments using the Arguments Function:
 
 ```C#
@@ -29,11 +29,11 @@ bool dryRun = Argument<bool>( "dry_run", false );
 This is great and all, but now one should probably do validation to ensure the passed in arguments
 are not an empty string, and the number of files to keep isn't negative.
 
-Don't forget to add to the description what easy argument does, which is required, etc!  That gets REALLY old REALLY fast.  Wouldn't it be nice
-if we could take these arguments and bind them to a class we can then use without any issue?
+Don't forget to add to the description what each argument does, which arguments are required, etc!  That gets REALLY old REALLY fast, especially in an environment with multiple tasks.
+Wouldn't it be nice if we could take these arguments and bind them to a class we can then use without any issue?
 
 With this addin, you now can, with the power of attributes.  Now instead of grabbing the arguments manually, just create a configuration class
-and set the corresponding properties with Attributes.
+and tag the corresponding properties with the proper Attributes.
 
 ```C#
 public class DeleteHelpersConfig
@@ -84,7 +84,7 @@ public class DeleteHelpersConfig
 }
 ```
 
-Now in your Task, instead of having to parse and validate several, ArgumentBinder takes care of all of that for you.  You just need to do this in your task:
+Now in your Task, instead of having to parse and validate several arguments, ArgumentBinder takes care of all of that for you.  You just need to do this in your task:
 
 ```C#
 Task( "delete_files" )
@@ -139,7 +139,7 @@ delete_files
 ========================================
 An error occurred when executing task 'delete_files'.
 Error: One or more errors occurred.
-        Argument 'path is required, but was never specified.
+        Argument 'path' is required, but was never specified.
 ```
 
 If you specify an argument that is not valid, you'll also get a helpful error message (in this example, going below the minimum for files to keep):

@@ -47,7 +47,7 @@ namespace Cake.ArgumentBinder
         public bool HasSecretValue { get; set; }
 
         /// <summary>
-        /// The default value if an argument isn't specifeid..
+        /// The default value if an argument isn't specified.
         /// </summary>
         protected abstract object BaseDefaultValue { get; }
 

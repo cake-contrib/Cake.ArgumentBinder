@@ -2,6 +2,8 @@ Cake.ArgumentBinder
 =========
 A way to bind arguments passed into cake to configuration classes.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/oj8cugsg3rmosax9?svg=true)](https://ci.appveyor.com/project/xforever1313/cake-argumentbinder)
+
 About
 --------
 This addin to [Cake](https://github.com/cake-build/cake), a C# build system, allows one to bind arguments passed into Cake
@@ -159,7 +161,6 @@ Best Practices
 --------
 * Keep your "Configuration" classes separate from classes/functions that perform any action. 
   Not only does this keep a separation of concerns, but it is consistent with what Cake does.
-
 
 TroubleShooting
 --------

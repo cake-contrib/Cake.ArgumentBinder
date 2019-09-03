@@ -4,13 +4,11 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
-// For intellesense in VS Code
+// For intellisense in VS Code
 #tool "nuget:?package=Cake.Bakery"
 
-// For binding arguments.
-#addin nuget:?package=Cake.ArgumentBinder
-
 #load "./DeleteHelpers.cake"
+#load "./FIGLet.cake"
 
 const string defaultTarget = "default";
 

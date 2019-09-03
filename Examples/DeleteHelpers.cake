@@ -7,7 +7,7 @@
 // This class helps delete files after a build,
 // while allowing one to keep some files around if desired.
 
-using Cake.ArgumentBinder;
+#load "./Includes.cake"
 
 // ---------------- Classes ----------------
 

@@ -1,0 +1,41 @@
+#--------------------#
+# Environment Config #
+#--------------------#
+
+image: Visual Studio 2019
+
+version: '{build}'
+
+branches:
+  only:
+    - master
+
+matrix:
+    fast_finish: true # Fail right away if something goes wrong.
+
+#--------------#
+# Build Config #
+#--------------#
+
+build_script:
+ -ps: .\build.ps1 -Target appveyor
+
+# Cake does this for us.
+test: off
+
+notifications:
+    - provider: Email
+      to:
+          - seth@shendrick.net
+      subject: 'Cake.ArgumentBinder Build {{status}}'
+
+      on_build_success: false
+      on_build_failure: false
+      on_build_status_changed: true
+
+#-----------#
+# Artifacts #
+#-----------#
+
+artifacts:
+  - path: 'dist\*.nupkg'

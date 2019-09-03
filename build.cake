@@ -160,4 +160,8 @@ Task( nugetPackTarget )
 ).Description( "Builds the nuget package." )
 .IsDependentOn( makeDistTarget );
 
+Task( "appveyor" )
+.Description( "Runs all of the tasks needed for AppVeyor" )
+.IsDependentOn( nugetPackTarget );
+
 RunTarget( target );

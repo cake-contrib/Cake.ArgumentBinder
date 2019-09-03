@@ -8,7 +8,7 @@
     <summary>This allows uses of the Cake build system to convert comamnd-line arguments to classes, instead of having to deal with parsing and verifying them manually.</summary>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/xforever1313/Cake.ArgumentBinder</projectUrl>
-    <!--<iconUrl></iconUrl>-->
+    <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <repository type="git" url="https://github.com/xforever1313/Cake.ArgumentBinder.git"/>
     <copyright>Copyright (c) Seth Hendrick</copyright>

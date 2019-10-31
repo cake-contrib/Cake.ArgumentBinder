@@ -2,6 +2,9 @@
 #tool "nuget:?package=OpenCover"
 #tool "nuget:?package=ReportGenerator"
 
+#module nuget:?package=Cake.DotNetTool.Module
+#tool "dotnet:?package=dotnet-format"
+
 const string buildTarget = "build";
 const string unitTestTarget = "unit_test";
 const string buildReleaseTarget = "build_release";
@@ -168,5 +171,17 @@ Task( nugetPackTarget )
 Task( "appveyor" )
 .Description( "Runs all of the tasks needed for AppVeyor" )
 .IsDependentOn( nugetPackTarget );
+
+Task( "format" )
+.Does(
+    () =>
+    {
+        DotNetCoreToolSettings settings = new DotNetCoreToolSettings
+        {
+            ToolPath = File( "./tools/dotnet-format.exe" )
+        };
+        DotNetCoreTool( sln, "dotnet-format", string.Empty, settings );
+    }
+).Description( "Formats all of the code to standards" );
 
 RunTarget( target );

@@ -62,7 +62,7 @@ namespace Cake.ArgumentBinder.UnitTests
         [Test]
         public void HasRequiredArgumentTest()
         {
-            const string value = "Arg Value"; 
+            const string value = "Arg Value";
 
             this.cakeArgs.Setup(
                 m => m.HasArgument( requiredArgName )
@@ -70,7 +70,7 @@ namespace Cake.ArgumentBinder.UnitTests
 
             this.cakeArgs.Setup(
                 m => m.GetArgument( requiredArgName )
-            ).Returns( value);
+            ).Returns( value );
 
             RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.AreEqual( value, uut.StringProperty );

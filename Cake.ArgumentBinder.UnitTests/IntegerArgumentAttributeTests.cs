@@ -109,7 +109,7 @@ namespace Cake.ArgumentBinder.UnitTests
 
                 RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
                 Assert.AreEqual( maxValue - 1, uut.IntProperty );
-            } 
+            }
         }
 
         /// <summary>

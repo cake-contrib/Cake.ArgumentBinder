@@ -27,6 +27,8 @@ Task( "banner" )
     () =>
     {
         FigletConfig config = CreateFromArguments<FigletConfig>();
+        Information( ArgumentConfigToString( config ) );
+        Information( string.Empty );
         Information( Figlet( config.Text ) );
     }
 ).DescriptionFromArguments<FigletConfig>( "Prints a banner to Console.Out" );

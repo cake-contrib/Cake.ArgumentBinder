@@ -24,9 +24,9 @@ public class FigletConfig
 
 Task( "banner" )
 .Does(
-    ( context ) =>
+    () =>
     {
-        FigletConfig config = ArgumentBinder.FromArguments<FigletConfig>( context );
-        context.Information( context.Figlet( config.Text ) );
+        FigletConfig config = CreateFromArguments<FigletConfig>();
+        Information( Figlet( config.Text ) );
     }
-).Description( ArgumentBinder.GetDescription<FigletConfig>( "Prints a banner to Console.Out" ) );
+).DescriptionFromArguments<FigletConfig>( "Prints a banner to Console.Out" );

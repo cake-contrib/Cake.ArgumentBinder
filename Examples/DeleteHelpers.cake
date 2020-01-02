@@ -129,20 +129,20 @@ Task( "delete_files" )
 .Does(
     ( context ) =>
     {
-        DeleteHelpersConfig config = ArgumentBinder.FromArguments<DeleteHelpersConfig>( context );
-        context.Information( ArgumentBinder.ConfigToStringHelper( config ) );
+        DeleteHelpersConfig config = CreateFromArguments<DeleteHelpersConfig>();
+        Information( ArgumentBinder.ConfigToStringHelper( config ) );
         DeleteHelpers.DeleteFiles( context, config );
     }
 )
-.Description( ArgumentBinder.GetDescription<DeleteHelpersConfig>( "Deletes specified files." ) );
+.DescriptionFromArguments<DeleteHelpersConfig>( "Deletes specified files." );
 
 Task( "delete_dirs" )
 .Does(
     ( context ) =>
     {
-        DeleteHelpersConfig config = ArgumentBinder.FromArguments<DeleteHelpersConfig>( context );
+        DeleteHelpersConfig config = CreateFromArguments<DeleteHelpersConfig>();
         context.Information( ArgumentBinder.ConfigToStringHelper( config ) );
         DeleteHelpers.DeleteDirectories( context, config );
     }
 )
-.Description( ArgumentBinder.GetDescription<DeleteHelpersConfig>( "Deletes specified directories." ) );
+.DescriptionFromArguments<DeleteHelpersConfig>( "Deletes specified directories." );

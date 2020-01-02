@@ -43,7 +43,7 @@ namespace Cake.ArgumentBinder
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        [CakeAliasCategory( "FromArguments" )]
+        [CakeAliasCategory( "Create" )]
         [CakeNamespaceImport( "Cake.ArgumentBinder" )]
         public static T CreateFromArguments<T>( this ICakeContext context, params object[] constructorArgs )
         {

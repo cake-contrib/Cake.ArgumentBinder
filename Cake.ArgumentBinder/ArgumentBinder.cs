@@ -86,7 +86,7 @@ namespace Cake.ArgumentBinder
         /// </summary>
         /// <typeparam name="T">The type of class to bind arguments to.</typeparam>
         /// <param name="constructorArgs">Any constructor arguments for the config class.</param>
-        public static T FromArguments<T>( this ICakeContext cakeContext, params object[] constructorArgs )
+        public static T FromArguments<T>( ICakeContext cakeContext, params object[] constructorArgs )
         {
             Type type = typeof( T );
             T instance = (T)Activator.CreateInstance( type, constructorArgs );

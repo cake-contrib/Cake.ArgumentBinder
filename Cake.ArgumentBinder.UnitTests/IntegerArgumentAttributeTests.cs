@@ -74,7 +74,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.GetArgument( requiredArgName )
             ).Returns( minValue.ToString() );
 
-            RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
+            RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.AreEqual( minValue, uut.IntProperty );
         }
 
@@ -94,7 +94,7 @@ namespace Cake.ArgumentBinder.UnitTests
                     m => m.GetArgument( requiredArgName )
                 ).Returns( ( minValue + 1 ).ToString() );
 
-                RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
+                RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
                 Assert.AreEqual( minValue + 1, uut.IntProperty );
             }
 
@@ -107,7 +107,7 @@ namespace Cake.ArgumentBinder.UnitTests
                     m => m.GetArgument( requiredArgName )
                 ).Returns( ( maxValue - 1 ).ToString() );
 
-                RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
+                RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
                 Assert.AreEqual( maxValue - 1, uut.IntProperty );
             }
         }
@@ -124,7 +124,7 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( false );
 
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );
@@ -146,7 +146,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.GetArgument( optionalArgName )
             ).Returns( maxValue.ToString() );
 
-            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( maxValue, uut.IntProperty );
         }
 
@@ -161,7 +161,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( false );
 
-            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( defaultValue, uut.IntProperty );
         }
 
@@ -181,7 +181,7 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( "lolImNotAnInt" );
 
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );
@@ -196,7 +196,7 @@ namespace Cake.ArgumentBinder.UnitTests
         public void EmptyArgumentTest()
         {
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<EmptyArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<EmptyArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );
@@ -218,7 +218,7 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( ( maxValue + 1 ).ToString() );
 
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );
@@ -240,7 +240,7 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( ( minValue - 1 ).ToString() );
 
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );

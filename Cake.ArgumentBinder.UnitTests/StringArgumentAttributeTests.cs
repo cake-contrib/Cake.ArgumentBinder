@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -72,7 +72,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.GetArgument( requiredArgName )
             ).Returns( value );
 
-            RequiredArgument uut = ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object );
+            RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.AreEqual( value, uut.StringProperty );
         }
 
@@ -88,7 +88,7 @@ namespace Cake.ArgumentBinder.UnitTests
             ).Returns( false );
 
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<RequiredArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );
@@ -112,7 +112,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.GetArgument( optionalArgName )
             ).Returns( value );
 
-            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( value, uut.StringProperty );
         }
 
@@ -127,7 +127,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( false );
 
-            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( defaultValue, uut.StringProperty );
         }
 
@@ -146,7 +146,7 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.GetArgument( optionalArgName )
             ).Returns( string.Empty );
 
-            OptionalArgument uut = ArgumentBinder.FromArguments<OptionalArgument>( this.cakeContext.Object );
+            OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( string.Empty, uut.StringProperty );
         }
 
@@ -158,7 +158,7 @@ namespace Cake.ArgumentBinder.UnitTests
         public void EmptyArgumentTest()
         {
             AggregateException e = Assert.Throws<AggregateException>(
-                () => ArgumentBinder.FromArguments<EmptyArgument>( this.cakeContext.Object )
+                () => ArgumentBinderAliases.CreateFromArguments<EmptyArgument>( this.cakeContext.Object )
             );
 
             Assert.AreEqual( 1, e.InnerExceptions.Count );

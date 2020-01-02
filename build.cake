@@ -21,7 +21,7 @@ DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults
 
 // This is the version of this software,
 // update before making a new release.
-const string version = "0.1.2";
+const string version = "0.2.0";
 
 DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings();
 
@@ -127,14 +127,22 @@ Task( nugetPackTarget )
 .Does(
     () =>
     {
-        List<NuSpecContent> files = new List<NuSpecContent>(
-            GetFiles( System.IO.Path.Combine( distFolder.ToString(), "*.dll" ) )
-                .Select( file => new NuSpecContent { Source = file.ToString(), Target = "lib/netstandard2.0" } )
+        List<NuSpecContent> files = new List<NuSpecContent>();
+
+        files.Add(
+            new NuSpecContent
+            { 
+                Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.dll" ),
+                Target = "lib/netstandard2.0" 
+            }
         );
 
-        files.AddRange(
-            GetFiles( System.IO.Path.Combine( distFolder.ToString(), "*.pdb" ) )
-                .Select( file => new NuSpecContent { Source = file.ToString(), Target = "lib/netstandard2.0" } )
+        files.Add(
+            new NuSpecContent
+            { 
+                Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.pdb" ),
+                Target = "lib/netstandard2.0" 
+            }
         );
 
         files.Add(

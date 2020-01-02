@@ -93,11 +93,11 @@ Task( "delete_files" )
 .Does(
     ( context ) =>
     {
-        DeleteHelpersConfig config = ArgumentBinder.FromArguments<DeleteHelpersConfig>( context );
+        DeleteHelpersConfig config = CreateFromArguments<DeleteHelpersConfig>();
         DeleteHelpers.DeleteFiles( context, config );
     }
 )
-.Description( ArgumentBinder.GetDescription<DeleteHelpersConfig>( "Deletes specified files." ) );
+.DescriptionFromArguments<DeleteHelpersConfig>( "Deletes specified files." );
 ```
 
 Now, if you type ```cake --showdescription``` on the command line, you will see a print out of the task and
@@ -164,7 +164,7 @@ Best Practices
 
 TroubleShooting
 --------
-* Ensure that in the classes that you are binding arguments to, you include the using statement ```using Cake.ArgumentBinder;```,
+* Ensure that in the classes that you are binding arguments to, you _may_ need to include the using statement ```using Cake.ArgumentBinder;```,
   otherwise the compiler won't be able to find the attributes, and produce a lot of errors.
 
 License

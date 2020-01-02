@@ -19,7 +19,7 @@ namespace Cake.ArgumentBinder
     {
         // ---------------- Constructor ----------------
 
-        public StringArgumentAttribute( string arg ):
+        public StringArgumentAttribute( string arg ) :
             base( arg )
         {
         }

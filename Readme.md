@@ -2,7 +2,7 @@ Cake.ArgumentBinder
 =========
 A way to bind arguments passed into cake to configuration classes.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/oj8cugsg3rmosax9?svg=true)](https://ci.appveyor.com/project/xforever1313/cake-argumentbinder)
+[![Build status](https://ci.appveyor.com/api/projects/status/p8qx0ee022gy9r9i?svg=true)](https://ci.appveyor.com/project/cakecontrib/cake-argumentbinder)
 
 About
 --------

@@ -16,6 +16,7 @@ bool runCoverage = Argument<bool>( "code_coverage", false );
 
 FilePath sln = new FilePath( "./Cake.ArgumentBinder.sln" );
 DirectoryPath distFolder = MakeAbsolute( new DirectoryPath( "./dist" ) );
+DirectoryPath nuspecFolder = MakeAbsolute( new DirectoryPath( "./nuspec" ) );
 DirectoryPath coverageFolder = MakeAbsolute( new DirectoryPath( "./CodeCoverage" ) );
 DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults" ) );
 
@@ -161,6 +162,14 @@ Task( nugetPackTarget )
             }
         );
 
+        files.Add(
+            new NuSpecContent
+            {
+                Source = System.IO.Path.Combine( nuspecFolder.ToString(), "icon.png" ),
+                Target = string.Empty
+            }
+        );
+
         NuGetPackSettings settings = new NuGetPackSettings
         {
             Version = version,
@@ -171,7 +180,9 @@ Task( nugetPackTarget )
             Files = files
         };
 
-        NuGetPack( "./nuspec/Cake.ArgumentBinder.nuspec", settings );
+        FilePath nuspec = nuspecFolder.CombineWithFilePath( "Cake.ArgumentBinder.nuspec" );
+
+        NuGetPack( nuspec.ToString(), settings );
     }
 ).Description( "Builds the nuget package." )
 .IsDependentOn( makeDistTarget );

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+>
+  <metadata>
     <id>Cake.ArgumentBinder</id>
     <version>0.0.0</version> <!-- Set during build. -->
     <authors>Seth Hendrick</authors>
@@ -8,6 +12,7 @@
     <summary>This allows uses of the Cake build system to convert comamnd-line arguments to classes, instead of having to deal with parsing and verifying them manually.</summary>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/xforever1313/Cake.ArgumentBinder</projectUrl>
+    <icon>icon.png</icon>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <repository type="git" url="https://github.com/xforever1313/Cake.ArgumentBinder.git"/>

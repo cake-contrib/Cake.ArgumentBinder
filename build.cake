@@ -149,6 +149,14 @@ Task( nugetPackTarget )
         files.Add(
             new NuSpecContent
             { 
+                Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.xml" ),
+                Target = "lib/netstandard2.0" 
+            }
+        );
+
+        files.Add(
+            new NuSpecContent
+            { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "License.txt" ),
                 Target = "License.txt"
             }

@@ -65,9 +65,9 @@ namespace Cake.ArgumentBinder
         [CakeMethodAlias]
         [CakeAliasCategory( "Description" )]
         [CakeNamespaceImport( "Cake.ArgumentBinder" )]
-        public static CakeTaskBuilder DescriptionFromArguments<T>( this CakeTaskBuilder builder, string description )
+        public static CakeTaskBuilder DescriptionFromArguments<T>( this CakeTaskBuilder builder, string taskDescription )
         {
-            return builder.Description( ArgumentBinder.GetDescription<T>( description ) );
+            return builder.Description( ArgumentBinder.GetDescription<T>( taskDescription ) );
         }
     }
 }

@@ -28,9 +28,6 @@ namespace Cake.ArgumentBinder
         /// 
         /// The default value IS allowed to be outside of the range specified
         /// in <see cref="Min"/> and <see cref="Max"/>.
-        /// 
-        /// This is ignored if <see cref="Required"/> is flagged as true,
-        /// as the value MUST be specified in this case.
         /// </summary>
         public int DefaultValue { get; set; }
 

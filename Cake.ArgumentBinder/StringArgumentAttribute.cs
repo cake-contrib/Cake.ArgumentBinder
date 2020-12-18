@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).

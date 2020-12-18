@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -80,12 +80,12 @@ namespace Cake.ArgumentBinder
         internal string TryValidate()
         {
             StringBuilder builder = new StringBuilder();
-            if ( string.IsNullOrWhiteSpace( this.ArgName ) )
+            if( string.IsNullOrWhiteSpace( this.ArgName ) )
             {
                 builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
             }
 
-            if ( this.Min > this.Max )
+            if( this.Min > this.Max )
             {
                 builder.AppendLine( nameof( this.Min ) + " can not be greater than the " + nameof( this.Max ) );
             }

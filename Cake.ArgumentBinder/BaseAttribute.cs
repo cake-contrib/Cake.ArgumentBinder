@@ -76,7 +76,7 @@ namespace Cake.ArgumentBinder
         protected void ToString( StringBuilder builder )
         {
             builder.AppendLine( "\t --" + this.ArgName );
-            if ( string.IsNullOrEmpty( this.Description ) )
+            if( string.IsNullOrEmpty( this.Description ) )
             {
                 builder.AppendLine( "\t\t(No Description Given)." );
             }
@@ -85,7 +85,7 @@ namespace Cake.ArgumentBinder
                 builder.AppendLine( $"\t\t{this.Description}." );
             }
             builder.AppendLine( $"\t\tType: {this.BaseType.Name}." );
-            if ( this.Required )
+            if( this.Required )
             {
                 builder.AppendLine( $"\t\tRequired: {this.Required}." );
             }

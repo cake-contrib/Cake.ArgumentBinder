@@ -29,13 +29,13 @@ namespace Cake.ArgumentBinder
 
             Type type = typeof( T );
             IEnumerable<PropertyInfo> properties = type.GetProperties();
-            foreach ( PropertyInfo info in properties )
+            foreach( PropertyInfo info in properties )
             {
                 Attribute argumentAttribute = info.GetCustomAttribute<Attribute>();
 
-                if ( argumentAttribute is IReadOnlyArgumentAttribute )
+                if( argumentAttribute is IReadOnlyArgumentAttribute )
                 {
-                    if ( addedArgumentString == false )
+                    if( addedArgumentString == false )
                     {
                         builder.AppendLine( "- Arguments:" );
                         addedArgumentString = true;
@@ -62,12 +62,12 @@ namespace Cake.ArgumentBinder
 
             builder.AppendLine( type.Name + "'s Configuration:" );
 
-            foreach ( PropertyInfo property in type.GetProperties() )
+            foreach( PropertyInfo property in type.GetProperties() )
             {
                 Attribute attr = property.GetCustomAttribute<Attribute>();
-                if ( attr is IReadOnlyArgumentAttribute argumentAttribute )
+                if( attr is IReadOnlyArgumentAttribute argumentAttribute )
                 {
-                    if ( argumentAttribute.HasSecretValue )
+                    if( argumentAttribute.HasSecretValue )
                     {
                         builder.AppendLine( $"\t-{property.Name}: ******" );
                     }
@@ -99,7 +99,7 @@ namespace Cake.ArgumentBinder
                 cakeContext
             );
 
-            if ( binderHelper.Success == false )
+            if( binderHelper.Success == false )
             {
                 throw binderHelper.GetException();
             }
@@ -163,13 +163,13 @@ namespace Cake.ArgumentBinder
 
             private void TryStringArguments()
             {
-                foreach ( PropertyInfo info in this.properties )
+                foreach( PropertyInfo info in this.properties )
                 {
                     StringArgumentAttribute argumentAttribute = info.GetCustomAttribute<StringArgumentAttribute>();
-                    if ( argumentAttribute != null )
+                    if( argumentAttribute != null )
                     {
                         string argumentErrors = argumentAttribute.TryValidate();
-                        if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
                             this.exceptions.Add(
                                 new AttributeValidationException( info, argumentErrors )
@@ -178,11 +178,11 @@ namespace Cake.ArgumentBinder
                         }
 
                         string cakeArg;
-                        if ( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
                         {
                             cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
                         }
-                        else if ( argumentAttribute.Required )
+                        else if( argumentAttribute.Required )
                         {
                             this.exceptions.Add(
                                 new MissingRequiredArgumentException( argumentAttribute.ArgName )
@@ -204,13 +204,13 @@ namespace Cake.ArgumentBinder
 
             private void TryBooleanArguments()
             {
-                foreach ( PropertyInfo info in this.properties )
+                foreach( PropertyInfo info in this.properties )
                 {
                     BooleanArgumentAttribute argumentAttribute = info.GetCustomAttribute<BooleanArgumentAttribute>();
-                    if ( argumentAttribute != null )
+                    if( argumentAttribute != null )
                     {
                         string argumentErrors = argumentAttribute.TryValidate();
-                        if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
                             this.exceptions.Add(
                                 new AttributeValidationException( info, argumentErrors )
@@ -220,10 +220,10 @@ namespace Cake.ArgumentBinder
 
                         bool? value = null;
                         string cakeArg;
-                        if ( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
                         {
                             cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                            if ( bool.TryParse( cakeArg, out bool result ) )
+                            if( bool.TryParse( cakeArg, out bool result ) )
                             {
                                 value = result;
                             }
@@ -236,7 +236,7 @@ namespace Cake.ArgumentBinder
                             }
                         }
 
-                        if ( argumentAttribute.Required && ( value == null ) )
+                        if( argumentAttribute.Required && ( value == null ) )
                         {
                             this.exceptions.Add(
                                 new MissingRequiredArgumentException( argumentAttribute.ArgName )
@@ -244,7 +244,7 @@ namespace Cake.ArgumentBinder
                             continue;
                         }
 
-                        if ( value == null )
+                        if( value == null )
                         {
                             value = argumentAttribute.DefaultValue;
                         }
@@ -259,13 +259,13 @@ namespace Cake.ArgumentBinder
 
             private void TryIntegerArguments()
             {
-                foreach ( PropertyInfo info in this.properties )
+                foreach( PropertyInfo info in this.properties )
                 {
                     IntegerArgumentAttribute argumentAttribute = info.GetCustomAttribute<IntegerArgumentAttribute>();
-                    if ( argumentAttribute != null )
+                    if( argumentAttribute != null )
                     {
                         string argumentErrors = argumentAttribute.TryValidate();
-                        if ( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
                             this.exceptions.Add(
                                 new AttributeValidationException( info, argumentErrors )
@@ -275,19 +275,19 @@ namespace Cake.ArgumentBinder
 
                         int? value = null;
                         string cakeArg;
-                        if ( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
                         {
                             cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                            if ( int.TryParse( cakeArg, out int result ) )
+                            if( int.TryParse( cakeArg, out int result ) )
                             {
-                                if ( result > argumentAttribute.Max )
+                                if( result > argumentAttribute.Max )
                                 {
                                     this.exceptions.Add(
                                         new ArgumentTooLargeException( argumentAttribute.Max.ToString(), argumentAttribute.ArgName )
                                     );
                                     continue;
                                 }
-                                if ( result < argumentAttribute.Min )
+                                if( result < argumentAttribute.Min )
                                 {
                                     this.exceptions.Add(
                                         new ArgumentTooSmallException( argumentAttribute.Min.ToString(), argumentAttribute.ArgName )
@@ -306,7 +306,7 @@ namespace Cake.ArgumentBinder
                             }
                         }
 
-                        if ( argumentAttribute.Required && ( value == null ) )
+                        if( argumentAttribute.Required && ( value == null ) )
                         {
                             this.exceptions.Add(
                                 new MissingRequiredArgumentException( argumentAttribute.ArgName )
@@ -314,7 +314,7 @@ namespace Cake.ArgumentBinder
                             continue;
                         }
 
-                        if ( value == null )
+                        if( value == null )
                         {
                             value = argumentAttribute.DefaultValue;
                         }

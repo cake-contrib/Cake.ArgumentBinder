@@ -8,7 +8,7 @@ using Cake.Core.Annotations;
 
 namespace Cake.ArgumentBinder
 {
-    [CakeAliasCategory("Arguments")]
+    [CakeAliasCategory( "Arguments" )]
     public static partial class ArgumentBinderAliases
     {
     }

@@ -18,8 +18,7 @@ matrix:
 #--------------#
 
 build_script:
- - ps: .\build.ps1 --bootstrap
- - ps: .\build.ps1 -Target appveyor
+ - ps: .\build.ps1 --target=appveyor
 
 # Cake does this for us.
 test: off

@@ -68,9 +68,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( requiredArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( requiredArgName )
-            ).Returns( value );
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                value
+            );
 
             RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.AreEqual( value, uut.StringProperty );
@@ -108,9 +109,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( value );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                value
+            );
 
             OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( value, uut.StringProperty );
@@ -142,9 +144,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( string.Empty );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                string.Empty
+            );
 
             OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( string.Empty, uut.StringProperty );

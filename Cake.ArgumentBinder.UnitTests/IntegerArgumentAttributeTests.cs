@@ -70,9 +70,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( requiredArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( requiredArgName )
-            ).Returns( minValue.ToString() );
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                minValue.ToString()
+            );
 
             RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.AreEqual( minValue, uut.IntProperty );
@@ -90,9 +91,10 @@ namespace Cake.ArgumentBinder.UnitTests
                     m => m.HasArgument( requiredArgName )
                 ).Returns( true );
 
-                this.cakeArgs.Setup(
-                    m => m.GetArgument( requiredArgName )
-                ).Returns( ( minValue + 1 ).ToString() );
+                this.cakeArgs.SetupGetArgumentSingle(
+                    requiredArgName,
+                    ( minValue + 1 ).ToString()
+                );
 
                 RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
                 Assert.AreEqual( minValue + 1, uut.IntProperty );
@@ -103,9 +105,10 @@ namespace Cake.ArgumentBinder.UnitTests
                     m => m.HasArgument( requiredArgName )
                 ).Returns( true );
 
-                this.cakeArgs.Setup(
-                    m => m.GetArgument( requiredArgName )
-                ).Returns( ( maxValue - 1 ).ToString() );
+                this.cakeArgs.SetupGetArgumentSingle(
+                    requiredArgName,
+                    ( maxValue - 1 ).ToString()
+                );
 
                 RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
                 Assert.AreEqual( maxValue - 1, uut.IntProperty );
@@ -142,9 +145,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( maxValue.ToString() );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                maxValue.ToString()
+            );
 
             OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.AreEqual( maxValue, uut.IntProperty );
@@ -176,9 +180,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( "lolImNotAnInt" );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                "lolImNotAnInt"
+            );
 
             AggregateException e = Assert.Throws<AggregateException>(
                 () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )
@@ -213,9 +218,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( ( maxValue + 1 ).ToString() );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                ( maxValue + 1 ).ToString()
+            );
 
             AggregateException e = Assert.Throws<AggregateException>(
                 () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )
@@ -235,9 +241,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( ( minValue - 1 ).ToString() );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                ( minValue - 1 ).ToString()
+            );
 
             AggregateException e = Assert.Throws<AggregateException>(
                 () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )

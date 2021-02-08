@@ -64,9 +64,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( requiredArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( requiredArgName )
-            ).Returns( "true" );
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                "true"
+            );
 
             RequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgument>( this.cakeContext.Object );
             Assert.IsTrue( uut.BoolProperty );
@@ -102,9 +103,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( "false" );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                "false"
+            );
 
             OptionalArgument uut = ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object );
             Assert.IsFalse( uut.BoolProperty );
@@ -136,9 +138,10 @@ namespace Cake.ArgumentBinder.UnitTests
                 m => m.HasArgument( optionalArgName )
             ).Returns( true );
 
-            this.cakeArgs.Setup(
-                m => m.GetArgument( optionalArgName )
-            ).Returns( "lolImNotABool" );
+            this.cakeArgs.SetupGetArgumentSingle(
+                optionalArgName,
+                "lolImNotABool"
+            );
 
             AggregateException e = Assert.Throws<AggregateException>(
                 () => ArgumentBinderAliases.CreateFromArguments<OptionalArgument>( this.cakeContext.Object )

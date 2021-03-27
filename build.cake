@@ -11,7 +11,7 @@ const string makeDistTarget = "make_dist";
 string target = Argument( "target", buildTarget );
 bool runCoverage = Argument<bool>( "code_coverage", false );
 
-FilePath sln = new FilePath( "./Cake.ArgumentBinder.sln" );
+FilePath sln = new FilePath( "./src/Cake.ArgumentBinder.sln" );
 DirectoryPath distFolder = MakeAbsolute( new DirectoryPath( "./dist" ) );
 DirectoryPath nuspecFolder = MakeAbsolute( new DirectoryPath( "./nuspec" ) );
 DirectoryPath coverageFolder = MakeAbsolute( new DirectoryPath( "./CodeCoverage" ) );
@@ -82,7 +82,7 @@ private void RunUnitTests( ICakeContext context )
         Configuration = "Debug"
     };
 
-    context.DotNetCoreTest( "./Cake.ArgumentBinder.UnitTests/Cake.ArgumentBinder.UnitTests.csproj", settings );
+    context.DotNetCoreTest( "./src/Cake.ArgumentBinder.UnitTests/Cake.ArgumentBinder.UnitTests.csproj", settings );
 }
 
 Task( buildReleaseTarget )
@@ -114,7 +114,7 @@ Task( makeDistTarget )
             Configuration = "Release"
         };
 
-        DotNetCorePublish( "./Cake.ArgumentBinder/Cake.ArgumentBinder.csproj", settings );
+        DotNetCorePublish( "./src/Cake.ArgumentBinder/Cake.ArgumentBinder.csproj", settings );
         CopyFile( "./LICENSE", System.IO.Path.Combine( distFolder.ToString(), "License.txt" ) );
         CopyFileToDirectory( "./Readme.md", distFolder );
     }

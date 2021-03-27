@@ -1,6 +1,18 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.12.0
+// ---------------- Addins ----------------
+
+#addin "nuget:?package=Cake.LicenseHeaderUpdater&version=0.2.0"
+
+// ---------------- Tools ----------------
+
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.12.0"
 #tool "nuget:?package=OpenCover&version=4.7.922"
 #tool "nuget:?package=ReportGenerator&version=4.8.7"
+
+// ---------------- Usings ----------------
+
+using System.Text.RegularExpressions;
+
+// ---------------- Constants ----------------
 
 const string buildTarget = "build";
 const string unitTestTarget = "unit_test";
@@ -28,6 +40,8 @@ msBuildSettings.WithProperty( "Version", version )
     .WithProperty( "AssemblyVersion", version )
     .SetMaxCpuCount( System.Environment.ProcessorCount )
     .WithProperty( "FileVersion", version );
+
+// ---------------- Tasks ----------------
 
 Task( buildTarget )
 .Does(
@@ -191,6 +205,66 @@ Task( nugetPackTarget )
     }
 ).Description( "Builds the nuget package." )
 .IsDependentOn( makeDistTarget );
+
+Task( "update_license" )
+.Does(
+    () =>
+    {
+        const string currentLicense =
+@"//
+// Copyright Seth Hendrick 2019-2021.
+// Distributed under the MIT License.
+// (See accompanying file LICENSE in the root of the repository).
+//
+
+";
+        const string oldLicense = 
+@"//
+//\s*Copyright\s+Seth\s+Hendrick\s+\d+-?\d*\.?
+//\s*Distributed\s+under\s+the\s+MIT\s+License\.?
+//\s*\(See\s+accompanying\s+file\s+LICENSE\s+in\s+the\s+root\s+of\s+the\s+repository\)\.?
+//[\n\r\s]*";
+
+        CakeLicenseHeaderUpdaterSettings settings = new CakeLicenseHeaderUpdaterSettings
+        {
+            LicenseString = currentLicense,
+            Threads = 0,
+        };
+
+        settings.OldHeaderRegexPatterns.Add( oldLicense );
+
+        settings.FileFilter = delegate ( FilePath path )
+        {
+            if( Regex.IsMatch( path.ToString(), @"[/\\]obj[/\\]" ) )
+            {
+                return false;
+            }
+            if( Regex.IsMatch( path.ToString(), @"[/\\]bin[/\\]" ) )
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        };
+
+        List<FilePath> files = new List<FilePath>();
+
+        SolutionParserResult slnResult = ParseSolution( sln );
+        foreach( SolutionProject proj in slnResult.Projects )
+        {
+            if( proj.Path.ToString().EndsWith( ".csproj" ) )
+            {
+                string glob = proj.Path.GetDirectory() + "/**/*.cs";
+                files.AddRange( GetFiles( glob ) );
+            }
+        }
+
+        files.AddRange( GetFiles( "Examples/*.cake" ) );
+        UpdateLicenseHeaders( files, settings );
+    }
+);
 
 Task( "appveyor" )
 .Description( "Runs all of the tasks needed for AppVeyor" )

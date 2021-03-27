@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -91,7 +91,14 @@ namespace Cake.ArgumentBinder
             }
             else
             {
-                builder.AppendLine( $"\t\tDefault Value: '{this.BaseDefaultValue}'." );
+                if( this.HasSecretValue )
+                {
+                    builder.AppendLine( $"\t\tDefault Value: ******." );
+                }
+                else
+                {
+                    builder.AppendLine( $"\t\tDefault Value: '{this.BaseDefaultValue}'." );
+                }
             }
             builder.AppendLine( $"\t\tValue is Secret: {this.HasSecretValue}." );
         }

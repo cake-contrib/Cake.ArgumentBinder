@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -73,6 +73,22 @@ namespace Cake.ArgumentBinder
 
         public ArgumentTooSmallException( string minimumValue, string argumentName ) :
             base( $"Value specified in argument '{argumentName}' is less than the minimum value of '{minimumValue}'." )
+        {
+        }
+    }
+
+    /// <summary>
+    /// Exception that gets thrown if an argument value is null,
+    /// when it is not allowed to be.
+    /// </summary>
+    public class ArgumentValueNullException : Exception
+    {
+        // ---------------- Constructor ----------------
+
+        public ArgumentValueNullException( string argumentName ) :
+            base( $"Value specified in argument '{argumentName}' is null, but a value is needed." + Environment.NewLine +
+                  $"This could mean an argument attribute is configured incorrectly."
+            )
         {
         }
     }

@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -6,9 +6,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.ArgumentBinder
 {
@@ -73,7 +75,7 @@ namespace Cake.ArgumentBinder
                     }
                     else
                     {
-                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj ).ToString()}" );
+                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj )}" );
                     }
                 }
             }
@@ -133,6 +135,7 @@ namespace Cake.ArgumentBinder
                 this.TryStringArguments();
                 this.TryBooleanArguments();
                 this.TryIntegerArguments();
+                this.TryFilePathArguments();
             }
 
             // ---------------- Properties ----------------
@@ -322,6 +325,74 @@ namespace Cake.ArgumentBinder
                         info.SetValue(
                             instance,
                             value.Value
+                        );
+                    }
+                }
+            }
+
+            private void TryFilePathArguments()
+            {
+                foreach( PropertyInfo info in this.properties )
+                {
+                    FilePathArgumentAttribute argumentAttribute = info.GetCustomAttribute<FilePathArgumentAttribute>();
+                    if( argumentAttribute != null )
+                    {
+                        string argumentErrors = argumentAttribute.TryValidate();
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        {
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
+                            continue;
+                        }
+
+                        string cakeArg;
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        {
+                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
+                        }
+                        else if( argumentAttribute.Required )
+                        {
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
+                            continue;
+                        }
+                        else
+                        {
+                            cakeArg = argumentAttribute.DefaultValue?.ToString() ?? null;
+                        }
+
+                        FilePath value = ( cakeArg != null ) ? new FilePath( cakeArg ) : null;
+
+                        if( argumentAttribute.MustExist && ( value == null ) )
+                        {
+                            this.exceptions.Add(
+                                new ArgumentValueNullException(
+                                    argumentAttribute.ArgName
+                                )
+                            );
+                            continue;
+                        }
+
+                        if( argumentAttribute.MustExist )
+                        {
+                            IFile file = cakeContext.FileSystem.GetFile( value );
+                            if( ( file == null ) || ( file.Exists == false ) )
+                            {
+                                this.exceptions.Add(
+                                    new FileNotFoundException(
+                                        "File must exist before executing cake task.",
+                                        value.ToString()
+                                    )
+                                );
+                                continue;
+                            }
+                        }
+
+                        info.SetValue(
+                            instance,
+                            value
                         );
                     }
                 }

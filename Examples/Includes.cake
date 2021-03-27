@@ -4,20 +4,10 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
-// This file only loads common usings and addins once (like C++ does).
-// This is done so we have better intellisense when writing cake files.
-
-#if (PACKAGE)
- // Do nothing, since its already defined.
-#else
-
 // For binding arguments.
-#addin nuget:?package=Cake.ArgumentBinder
+#addin nuget:?package=Cake.ArgumentBinder&version=0.3.0
 
 using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
-#define PACKAGE
-#endif

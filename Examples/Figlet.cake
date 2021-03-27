@@ -8,7 +8,7 @@
 // to generate an ASCII banner.
 
 #load "./Includes.cake"
-#addin "nuget:?package=Cake.Figlet"
+#addin "nuget:?package=Cake.Figlet&version=2.0.1"
 
 public class FigletConfig
 {

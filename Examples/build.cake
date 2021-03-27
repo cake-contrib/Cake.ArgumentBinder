@@ -4,9 +4,6 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
-// For intellisense in VS Code
-#tool "nuget:?package=Cake.Bakery"
-
 #load "./DeleteHelpers.cake"
 #load "./FIGLet.cake"
 

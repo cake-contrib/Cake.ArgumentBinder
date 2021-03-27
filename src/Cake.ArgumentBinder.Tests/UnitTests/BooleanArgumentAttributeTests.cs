@@ -9,7 +9,7 @@ using Cake.Core;
 using Moq;
 using NUnit.Framework;
 
-namespace Cake.ArgumentBinder.UnitTests
+namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
     public class BooleanArgumentAttributeTests

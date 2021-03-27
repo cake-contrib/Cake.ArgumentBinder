@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Cake.Core;
 using Moq;
 
-namespace Cake.ArgumentBinder.UnitTests
+namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     public static class MockICakeArgumentsExtensions
     {

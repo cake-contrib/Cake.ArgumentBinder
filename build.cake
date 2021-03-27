@@ -96,7 +96,7 @@ private void RunUnitTests( ICakeContext context )
         Configuration = "Debug"
     };
 
-    context.DotNetCoreTest( "./src/Cake.ArgumentBinder.UnitTests/Cake.ArgumentBinder.UnitTests.csproj", settings );
+    context.DotNetCoreTest( "./src/Cake.ArgumentBinder.Tests/Cake.ArgumentBinder.Tests.csproj", settings );
 }
 
 Task( buildReleaseTarget )

@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -15,7 +15,7 @@ namespace Cake.ArgumentBinder
     /// or run-time exceptions will occur.
     /// </summary>
     [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public class StringArgumentAttribute : BaseStringAttribute, IReadOnlyArgumentAttribute
+    public sealed class StringArgumentAttribute : BaseStringAttribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Constructor ----------------
 

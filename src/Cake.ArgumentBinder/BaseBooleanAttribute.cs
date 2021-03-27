@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Cake.ArgumentBinder
 {
-    public class BaseBooleanAttribute : BaseAttribute
+    public abstract class BaseBooleanAttribute : BaseAttribute
     {
         // ---------------- Constructor ----------------
 

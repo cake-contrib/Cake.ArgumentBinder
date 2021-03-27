@@ -5,7 +5,7 @@
 //
 
 #load "./DeleteHelpers.cake"
-#load "./FIGLet.cake"
+#load "./Figlet.cake"
 
 const string defaultTarget = "default";
 

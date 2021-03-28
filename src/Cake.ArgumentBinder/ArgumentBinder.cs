@@ -142,6 +142,7 @@ namespace Cake.ArgumentBinder
                 this.TryBooleanArguments();
                 this.TryIntegerArguments();
                 this.TryFilePathArguments();
+                this.TryDirectoryPathArguments();
             }
 
             // ---------------- Properties ----------------
@@ -390,6 +391,73 @@ namespace Cake.ArgumentBinder
                                     new FileNotFoundException(
                                         "File must exist before executing cake task.",
                                         value.ToString()
+                                    )
+                                );
+                                continue;
+                            }
+                        }
+
+                        info.SetValue(
+                            instance,
+                            value
+                        );
+                    }
+                }
+            }
+
+            private void TryDirectoryPathArguments()
+            {
+                foreach( PropertyInfo info in this.properties )
+                {
+                    DirectoryPathArgumentAttribute argumentAttribute = info.GetCustomAttribute<DirectoryPathArgumentAttribute>();
+                    if( argumentAttribute != null )
+                    {
+                        string argumentErrors = argumentAttribute.TryValidate();
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        {
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
+                            continue;
+                        }
+
+                        string cakeArg;
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        {
+                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
+                        }
+                        else if( argumentAttribute.Required )
+                        {
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
+                            continue;
+                        }
+                        else
+                        {
+                            cakeArg = argumentAttribute.DefaultValue?.ToString() ?? null;
+                        }
+
+                        DirectoryPath value = ( cakeArg != null ) ? new DirectoryPath( cakeArg ) : null;
+
+                        if( argumentAttribute.MustExist && ( value == null ) )
+                        {
+                            this.exceptions.Add(
+                                new ArgumentValueNullException(
+                                    argumentAttribute.ArgName
+                                )
+                            );
+                            continue;
+                        }
+
+                        if( argumentAttribute.MustExist )
+                        {
+                            IDirectory dir = cakeContext.FileSystem.GetDirectory( value );
+                            if( ( dir == null ) || ( dir.Exists == false ) )
+                            {
+                                this.exceptions.Add(
+                                    new DirectoryNotFoundException(
+                                        "Directory must exist before executing cake task."
                                     )
                                 );
                                 continue;

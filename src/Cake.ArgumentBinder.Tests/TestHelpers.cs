@@ -42,13 +42,46 @@ namespace Cake.ArgumentBinder.Tests
             if( lineCount == 0 )
             {
                 Assert.Fail(
-                    $"Found no matching lines for {expectedLine}.{Environment.NewLine}All lines: {Environment.NewLine}{multiLineString}"
+                    $"Found no matching lines for '{expectedLine}'.{Environment.NewLine}All lines: {Environment.NewLine}{multiLineString}"
                 );
             }
             else if( lineCount != 1 )
             {
                 Assert.Fail(
                     $"Found too many lines:{Environment.NewLine}{foundLines}"
+                );
+            }
+        }
+
+        public static void EnsureLineDoesNotExistFromMultiLineString( string expectedLine, string multiLineString )
+        {
+            Regex regex = new Regex( $@"\s+{Regex.Escape( expectedLine )}" );
+
+            EnsureLineDoesNotExistFromMultiLineString( regex, multiLineString );
+        }
+
+        public static void EnsureLineDoesNotExistFromMultiLineString( Regex expectedLine, string multiLineString )
+        {
+            int lineCount = 0;
+            StringBuilder foundLines = new StringBuilder();
+            using( StringReader reader = new StringReader( multiLineString ) )
+            {
+                string line = reader.ReadLine();
+                while( line != null )
+                {
+                    if( expectedLine.IsMatch( line ) )
+                    {
+                        ++lineCount;
+                        foundLines.AppendLine( "-" + line );
+                    }
+                    line = reader.ReadLine();
+                }
+            }
+
+            if( lineCount != 0 )
+            {
+                Assert.Fail(
+                    $"Found a matching line for '{expectedLine}'.{Environment.NewLine}All lines: {Environment.NewLine}{multiLineString}"
                 );
             }
         }

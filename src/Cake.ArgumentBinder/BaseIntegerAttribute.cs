@@ -11,6 +11,11 @@ namespace Cake.ArgumentBinder
 {
     public abstract class BaseIntegerAttribute : BaseAttribute
     {
+        // ---------------- Fields ----------------
+
+        internal static readonly string MinValuePrefix = "Minimum Value";
+        internal static readonly string MaxValuePrefix = "Maximum Value";
+
         // ---------------- Constructor ----------------
 
         protected BaseIntegerAttribute( string arg ) :
@@ -36,6 +41,10 @@ namespace Cake.ArgumentBinder
         /// If the argument is less than (equal to is okay) this value,
         /// validation will fail.
         /// </summary>
+        /// <remarks>
+        /// 0 is chosen to be the default value since most arguments
+        /// (in the author's experience) usually are never negative.
+        /// </remarks>
         public int Min { get; set; }
 
         /// <summary>
@@ -63,12 +72,26 @@ namespace Cake.ArgumentBinder
 
         // ---------------- Functions ----------------
 
+        /// <remarks>
+        /// <see cref="Min"/> and <see cref="Max"/> will be hidden
+        /// if <see cref="BaseAttribute.HasSecretValue"/> is set to true.
+        /// We don't want anyone to guess what a valid range of the value could be.
+        /// </remarks>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
             this.ToString( builder );
-            builder.AppendLine( "\t\tMinimum Value: " + this.Min );
-            builder.AppendLine( "\t\tMaximum Value: " + this.Max );
+
+            if( this.HasSecretValue )
+            {
+                builder.AppendLine( $"\t\t{MinValuePrefix}: {ArgumentBinder.HiddenString}" );
+                builder.AppendLine( $"\t\t{MaxValuePrefix}: {ArgumentBinder.HiddenString}" );
+            }
+            else
+            {
+                builder.AppendLine( $"\t\t{MinValuePrefix}: {this.Min}" );
+                builder.AppendLine( $"\t\t{MaxValuePrefix}: {this.Max}" );
+            }
 
             return builder.ToString();
         }

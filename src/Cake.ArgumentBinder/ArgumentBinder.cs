@@ -16,6 +16,12 @@ namespace Cake.ArgumentBinder
 {
     public static class ArgumentBinder
     {
+        // ---------------- Fields ----------------
+
+        internal static readonly string HiddenString = "******";
+
+        // ---------------- Functions ----------------
+
         /// <summary>
         /// Creates a Cake Description string that can be put into
         /// a Task's Description function during a printout of "cake --showdescription".
@@ -71,7 +77,7 @@ namespace Cake.ArgumentBinder
                 {
                     if( argumentAttribute.HasSecretValue )
                     {
-                        builder.AppendLine( $"\t-{property.Name}: ******" );
+                        builder.AppendLine( $"\t-{property.Name}: {HiddenString}" );
                     }
                     else
                     {

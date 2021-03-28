@@ -11,7 +11,15 @@ namespace Cake.ArgumentBinder
 {
     public abstract class BaseAttribute : Attribute
     {
-        // ---------------- Constructor ----------------
+        // ---------------- Fields ----------------
+
+        internal static readonly string RequiredPrefix = "Required";
+
+        internal static readonly string DefaultValuePrefix = "Default Value";
+
+        internal static readonly string ValueIsSecretPrefix = "Value is Secret";
+
+        internal static readonly string TypePrefix = "Type";
 
         // ---------------- Constructor ----------------
 
@@ -84,23 +92,29 @@ namespace Cake.ArgumentBinder
             {
                 builder.AppendLine( $"\t\t{this.Description}." );
             }
-            builder.AppendLine( $"\t\tType: {this.BaseType.Name}." );
+            builder.AppendLine( $"\t\t{TypePrefix}: {this.BaseType.Name}." );
             if( this.Required )
             {
-                builder.AppendLine( $"\t\tRequired: {this.Required}." );
+                builder.AppendLine( $"\t\t{RequiredPrefix}: {this.Required}." );
             }
             else
             {
                 if( this.HasSecretValue )
                 {
-                    builder.AppendLine( $"\t\tDefault Value: ******." );
+                    builder.AppendLine( $"\t\t{DefaultValuePrefix}: {ArgumentBinder.HiddenString}." );
                 }
                 else
                 {
-                    builder.AppendLine( $"\t\tDefault Value: '{this.BaseDefaultValue}'." );
+                    builder.AppendLine( $"\t\t{DefaultValuePrefix}: {this.BaseDefaultValue}." );
                 }
             }
-            builder.AppendLine( $"\t\tValue is Secret: {this.HasSecretValue}." );
+
+            if( this.HasSecretValue )
+            {
+                // Doesn't seem to be a need to print this out unless the value
+                // is actually secret; it just adds more stuff to parse through.
+                builder.AppendLine( $"\t\t{ValueIsSecretPrefix}: {this.HasSecretValue}." );
+            }
         }
     }
 }

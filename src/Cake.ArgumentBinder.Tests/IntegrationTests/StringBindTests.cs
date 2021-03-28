@@ -4,6 +4,7 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
+using System;
 using Cake.Common.Diagnostics;
 using Cake.Core;
 using Cake.Frosting;
@@ -17,6 +18,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
         // ---------------- Fields ----------------
 
         private static StringBind actualBind;
+        private static Exception foundException;
 
         // ---------------- Setup / Teardown ----------------
 
@@ -24,12 +26,14 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
         public void TestSetup()
         {
             actualBind = null;
+            foundException = null;
         }
 
         [TearDown]
         public void TestTeardown()
         {
             actualBind = null;
+            foundException = null;
         }
 
         // ---------------- Tests ----------------
@@ -54,6 +58,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
             // Check
             Assert.NotNull( actualBind );
+            Assert.Null( foundException );
             Assert.AreEqual( arg1, actualBind.RequiredArg );
             Assert.AreEqual( arg2, actualBind.OptionalArg );
             Assert.AreEqual( arg3, actualBind.NullDefaultArg );
@@ -75,9 +80,31 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
             // Check
             Assert.NotNull( actualBind );
+            Assert.Null( foundException );
             Assert.AreEqual( arg1, actualBind.RequiredArg );
             Assert.AreEqual( StringBind.DefaultValue, actualBind.OptionalArg );
             Assert.AreEqual( StringBind.NullDefaultValue, actualBind.NullDefaultArg );
+        }
+
+        [Test]
+        public void DoStringBindRequiredArgMissingTest()
+        {
+            // Setup
+            string[] arguments = new string[]
+            {
+                $"--target={nameof( StringBindTask )}",
+            };
+
+            // Act
+            int exitCode = CakeFrostingRunner.TryRunCake( arguments );
+
+            // Check
+            Assert.NotZero( exitCode );
+            Assert.NotNull( foundException );
+            Assert.IsTrue( foundException is AggregateException );
+
+            AggregateException ex = (AggregateException)foundException;
+            Assert.IsTrue( ex.InnerExceptions[0] is MissingRequiredArgumentException );
         }
 
         // ---------------- Helper Classes ----------------
@@ -140,6 +167,12 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             {
                 actualBind = context.CreateFromArguments<StringBind>();
                 context.Information( actualBind.ToString() );
+            }
+
+            public override void OnError( Exception exception, ICakeContext context )
+            {
+                StringBindTests.foundException = exception;
+                base.OnError( exception, context );
             }
         }
     }

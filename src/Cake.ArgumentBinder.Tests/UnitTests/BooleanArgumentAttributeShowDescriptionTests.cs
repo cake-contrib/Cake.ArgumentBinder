@@ -1,7 +1,7 @@
 ﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
-// (See accompanying file LICENSE in the root of the repository).
+// (See accompanying Directory LICENSE in the root of the repository).
 //
 
 using NUnit.Framework;
@@ -9,24 +9,22 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class IntegerArgumentAttributeShowDescriptionTests
+    public class BooleanArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
         private const string taskDescription = "Task Description";
-        private const string argumentName = "int_argument";
+        private const string argumentName = "bool_argument";
         private const string argDescription = "Some Description";
-        private const int defaultValue = 1;
-        private const int minValue = -1;
-        private const int maxValue = 3;
+        private const bool defaultValue = true;
 
         // ---------------- Tests ----------------
 
         [Test]
-        public void IntegerArgumentNotHiddenNotRequiredTest()
+        public void BooleanArgumentNotHiddenNotRequiredTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentNotHiddenNotRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<BooleanArgumentNotHiddenNotRequired>( taskDescription );
 
             // Check
 
@@ -43,22 +41,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( bool ).Name}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.DefaultValuePrefix}: {defaultValue}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
                 actualDescription
             );
 
@@ -76,10 +64,10 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
-        public void IntegerArgumentNotHiddenButRequiredTest()
+        public void BooleanArgumentNotHiddenButRequiredTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentNotHiddenButRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<BooleanArgumentNotHiddenButRequired>( taskDescription );
 
             // Check
 
@@ -96,17 +84,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
+                $"{BaseAttribute.TypePrefix}: {typeof( bool ).Name}",
                 actualDescription
             );
 
@@ -126,10 +104,10 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
-        public void IntegerArgumentHiddenNotRequiredTest()
+        public void BooleanArgumentHiddenNotRequiredTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentHiddenNotRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<BooleanArgumentHiddenNotRequired>( taskDescription );
 
             // Check
 
@@ -146,22 +124,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( bool ).Name}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.DefaultValuePrefix}: {ArgumentBinder.HiddenString}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
                 actualDescription
             );
 
@@ -174,10 +142,10 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
-        public void IntegerArgumentHiddenAndRequiredTest()
+        public void BooleanArgumentHiddenAndRequiredTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentHiddenAndRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<BooleanArgumentHiddenAndRequired>( taskDescription );
 
             // Check
 
@@ -194,17 +162,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{BaseAttribute.TypePrefix}: {typeof( bool ).Name}",
                 actualDescription
             );
 
@@ -223,62 +181,54 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
         }
 
-        // ---------------- Helper Classes ----------------
+        // ---------------- Test Helpers ----------------
 
-        public class IntegerArgumentNotHiddenNotRequired
+        public class BooleanArgumentNotHiddenNotRequired
         {
-            [IntegerArgument(
+            [BooleanArgument(
                 argumentName,
                 Description = argDescription,
                 DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = false,
                 Required = false
             )]
-            public int IntegerArgument { get; set; }
+            public bool BooleanArgument { get; set; }
         }
 
-        public class IntegerArgumentNotHiddenButRequired
+        public class BooleanArgumentNotHiddenButRequired
         {
-            [IntegerArgument(
+            [BooleanArgument(
                 argumentName,
                 Description = argDescription,
                 DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = false,
                 Required = true
             )]
-            public int IntegerArgument { get; set; }
+            public bool BooleanArgument { get; set; }
         }
 
-        public class IntegerArgumentHiddenNotRequired
+        public class BooleanArgumentHiddenNotRequired
         {
-            [IntegerArgument(
+            [BooleanArgument(
                 argumentName,
                 Description = argDescription,
                 DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = true,
                 Required = false
             )]
-            public int IntegerArgument { get; set; }
+            public bool BooleanArgument { get; set; }
         }
 
-        public class IntegerArgumentHiddenAndRequired
+        public class BooleanArgumentHiddenAndRequired
         {
-            [IntegerArgument(
+            [BooleanArgument(
                 argumentName,
                 Description = argDescription,
                 DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = true,
                 Required = true
             )]
-            public int IntegerArgument { get; set; }
+            public bool BooleanArgument { get; set; }
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Cake.ArgumentBinder
                     }
                     else
                     {
-                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj )}" );
+                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj )?.ToString() ?? "[null]"}" );
                     }
                 }
             }

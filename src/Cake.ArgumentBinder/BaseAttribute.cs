@@ -105,7 +105,7 @@ namespace Cake.ArgumentBinder
                 }
                 else
                 {
-                    builder.AppendLine( $"\t\t{DefaultValuePrefix}: {this.BaseDefaultValue}." );
+                    builder.AppendLine( $"\t\t{DefaultValuePrefix}: {this.BaseDefaultValue?.ToString() ?? "[null]"}." );
                 }
             }
 

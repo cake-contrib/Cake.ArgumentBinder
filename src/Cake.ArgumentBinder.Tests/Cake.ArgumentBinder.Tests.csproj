@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Cake.ArgumentBinder\Cake.ArgumentBinder.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IntegrationTests\" />
-  </ItemGroup>
-
 </Project>

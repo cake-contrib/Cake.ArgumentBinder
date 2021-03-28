@@ -6,7 +6,7 @@
 
 namespace Cake.ArgumentBinder
 {
-    public sealed class FilePathArgumentAttribute : BaseFilePathAttribute
+    public sealed class FilePathArgumentAttribute : BaseFilePathAttribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Constructor ----------------
 

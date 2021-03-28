@@ -1,16 +1,19 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
 //
 
-using System;
 using System.Text;
 
 namespace Cake.ArgumentBinder
 {
     public abstract class BasePathAttribute : BaseAttribute
     {
+        // ---------------- Fields ----------------
+
+        internal static readonly string MustExistPrefix = "Must Exist";
+
         // ---------------- Constructor ----------------
 
         protected BasePathAttribute( string arg ) :
@@ -29,8 +32,8 @@ namespace Cake.ArgumentBinder
         /// <see cref="MustExist"/> can not be true.
         /// </summary>
         /// <remarks>
-        /// This is a string, and not a <see cref="Cake.Core.IO.Path"/>
-        /// because <see cref="Cake.Core.IO.Path"/> can not be a property on an attribute.
+        /// This is a string, and not a <see cref="Core.IO.Path"/>
+        /// because <see cref="Core.IO.Path"/> can not be a property on an attribute.
         /// </remarks>
         public string DefaultValue { get; set; }
 
@@ -57,7 +60,7 @@ namespace Cake.ArgumentBinder
         {
             StringBuilder builder = new StringBuilder();
             this.ToString( builder );
-            builder.AppendLine( $"\t\tMust Exist: {this.MustExist}." );
+            builder.AppendLine( $"\t\t{MustExistPrefix}: {this.MustExist}." );
 
             return builder.ToString();
         }

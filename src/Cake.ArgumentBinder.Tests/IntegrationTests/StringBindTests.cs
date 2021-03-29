@@ -104,6 +104,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             Assert.IsTrue( foundException is AggregateException );
 
             AggregateException ex = (AggregateException)foundException;
+            Assert.AreEqual( 1, ex.InnerExceptions.Count );
             Assert.IsTrue( ex.InnerExceptions[0] is MissingRequiredArgumentException );
         }
 

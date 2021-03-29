@@ -5,6 +5,7 @@
 //
 
 using System;
+using System.IO;
 using System.Reflection;
 using Cake.Common.Diagnostics;
 using Cake.Core;
@@ -117,6 +118,35 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             Assert.AreEqual( 2, ex.InnerExceptions.Count );
             Assert.IsTrue( ex.InnerExceptions[0] is MissingRequiredArgumentException );
             Assert.IsTrue( ex.InnerExceptions[1] is MissingRequiredArgumentException );
+        }
+
+        [Test]
+        public void DoFilePathBindFileDoesNotExistTest()
+        {
+            // Setup
+            const string requiredArgValue = "somewhere.txt";
+            const string optionalArgValue = "someplace.txt";
+            const string nullArgValue = "a thing.txt";
+            string[] arguments = new string[]
+            {
+                $"--target={nameof( FilePathBindTask )}",
+                $"--{FilePathBind.RequiredArgName}=\"{requiredArgValue}\"",
+                $"--{FilePathBind.OptionalArgName}=\"{optionalArgValue}\"",
+                $"--{FilePathBind.NullArgName}={nullArgValue}",
+                $"--{FilePathBind.MustExistArgName}=\"{exePath}.txt\"" // <-.txt to exe makes it not exist.
+            };
+
+            // Act
+            int exitCode = CakeFrostingRunner.TryRunCake( arguments );
+
+            // Check
+            Assert.NotZero( exitCode );
+            Assert.NotNull( foundException );
+            Assert.IsTrue( foundException is AggregateException );
+
+            AggregateException ex = (AggregateException)foundException;
+            Assert.AreEqual( 1, ex.InnerExceptions.Count );
+            Assert.IsTrue( ex.InnerExceptions[0] is FileNotFoundException );
         }
 
         // ---------------- Helper Classes ----------------

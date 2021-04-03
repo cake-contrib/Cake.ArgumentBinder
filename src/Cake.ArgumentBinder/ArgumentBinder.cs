@@ -20,6 +20,8 @@ namespace Cake.ArgumentBinder
 
         internal static readonly string HiddenString = "******";
 
+        internal static readonly string NullString = "[null]";
+
         // ---------------- Functions ----------------
 
         /// <summary>
@@ -77,11 +79,11 @@ namespace Cake.ArgumentBinder
                 {
                     if( argumentAttribute.HasSecretValue )
                     {
-                        builder.AppendLine( $"\t-{property.Name}: {HiddenString}" );
+                        builder.AppendLine( $"\t- {property.Name}: {HiddenString}" );
                     }
                     else
                     {
-                        builder.AppendLine( $"\t-{property.Name}: {property.GetValue( obj )?.ToString() ?? "[null]"}" );
+                        builder.AppendLine( $"\t- {property.Name}: {property.GetValue( obj )?.ToString() ?? NullString}" );
                     }
                 }
             }

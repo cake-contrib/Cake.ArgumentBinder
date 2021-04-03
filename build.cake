@@ -84,7 +84,7 @@ Task( unitTestTarget )
             RunUnitTests( context );
         }
     }
-).Description( "Runs all Unit Tests" )
+).Description( "Runs all Unit Tests.  --code_coverage=true to run coverage" )
 .IsDependentOn( buildTarget );
 
 private void RunUnitTests( ICakeContext context )

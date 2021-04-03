@@ -14,11 +14,11 @@
     <description>Bind Cake arguments to classes via Attributes</description>
     <summary>This allows uses of the Cake build system to convert comamnd-line arguments to classes, instead of having to deal with parsing and verifying them manually.</summary>
     <license type="expression">MIT</license>
-    <projectUrl>https://github.com/xforever1313/Cake.ArgumentBinder</projectUrl>
+    <projectUrl>https://github.com/cake-contrib/Cake.ArgumentBinder</projectUrl>
     <icon>icon.png</icon>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <repository type="git" url="https://github.com/xforever1313/Cake.ArgumentBinder.git"/>
+    <repository type="git" url="https://github.com/cake-contrib/Cake.ArgumentBinder.git"/>
     <copyright>Copyright (c) Seth Hendrick</copyright>
     <tags>xforever1313 cake build addin dotnet C# argument binder reflection attributes</tags>
   </metadata>

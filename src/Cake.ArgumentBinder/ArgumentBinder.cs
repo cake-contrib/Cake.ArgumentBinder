@@ -145,6 +145,7 @@ namespace Cake.ArgumentBinder
                 this.TryIntegerArguments();
                 this.TryFilePathArguments();
                 this.TryDirectoryPathArguments();
+                this.TryEnumAttributes();
             }
 
             // ---------------- Properties ----------------
@@ -504,6 +505,90 @@ namespace Cake.ArgumentBinder
                                 );
                                 continue;
                             }
+                        }
+
+                        info.SetValue(
+                            instance,
+                            value
+                        );
+                    }
+                }
+            }
+
+            private void TryEnumAttributes()
+            {
+                foreach( PropertyInfo info in this.properties )
+                {
+                    EnumArgumentAttribute argumentAttribute;
+                    try
+                    {
+                        argumentAttribute = info.GetCustomAttribute<EnumArgumentAttribute>();
+                    }
+                    catch( ArgumentException e )
+                    {
+                        this.exceptions.Add( e );
+                        continue;
+                    }
+
+                    if( argumentAttribute != null )
+                    {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
+                        string argumentErrors = argumentAttribute.TryValidate();
+                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
+                        {
+                            this.exceptions.Add(
+                                new AttributeValidationException( info, argumentErrors )
+                            );
+                            continue;
+                        }
+
+                        Enum value = null;
+                        string cakeArg;
+                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
+                        {
+                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
+
+                            // No TryParse (well, no TryParse that doesn't require a generic).
+                            // Need to do a try{} catch{} :/.
+                            try
+                            {
+                                value = Enum.Parse( argumentAttribute.BaseType, cakeArg ) as Enum;
+                            }
+                            catch( ArgumentException )
+                            {
+                                this.exceptions.Add(
+                                    new ArgumentFormatException( argumentAttribute.BaseType, argumentAttribute.ArgName )
+                                );
+                                continue;
+                            }
+
+                            if( value == null )
+                            {
+                                this.exceptions.Add(
+                                    new ArgumentFormatException( argumentAttribute.BaseType, argumentAttribute.ArgName )
+                                );
+                                continue;
+                            }
+                        }
+
+                        if( argumentAttribute.Required && ( value == null ) )
+                        {
+                            this.exceptions.Add(
+                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
+                            );
+                            continue;
+                        }
+
+                        if( value == null )
+                        {
+                            value = argumentAttribute.DefaultValue;
                         }
 
                         info.SetValue(

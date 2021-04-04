@@ -319,6 +319,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.IsTrue( e.InnerExceptions[0] is DirectoryNotFoundException );
         }
 
+        [Test]
+        public void WrongTypeTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+               () => ArgumentBinderAliases.CreateFromArguments<MismatchedTypeArgument>( this.cakeContext.Object )
+           );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is InvalidPropertyTypeForAttributeException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument
@@ -375,6 +386,14 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
                 DefaultValue = null
             )]
             public DirectoryPath DirectoryPathProperty { get; set; }
+        }
+
+        private class MismatchedTypeArgument
+        {
+            [DirectoryPathArgument(
+                requiredArgName
+            )]
+            public string MismatchedType { get; set; }
         }
     }
 }

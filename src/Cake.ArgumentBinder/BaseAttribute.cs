@@ -62,7 +62,7 @@ namespace Cake.ArgumentBinder
         /// <summary>
         /// The base C# type this will bind to.
         /// </summary>
-        protected abstract Type BaseType { get; }
+        internal abstract Type BaseType { get; }
 
         // ---------------- Functions ----------------
 

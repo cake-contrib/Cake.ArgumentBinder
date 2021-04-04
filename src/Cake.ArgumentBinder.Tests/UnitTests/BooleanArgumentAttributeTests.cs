@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -166,6 +166,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.IsTrue( e.InnerExceptions[0] is AttributeValidationException );
         }
 
+        [Test]
+        public void WrongTypeTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+               () => ArgumentBinderAliases.CreateFromArguments<MismatchedTypeArgument>( this.cakeContext.Object )
+           );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is InvalidPropertyTypeForAttributeException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument
@@ -183,7 +194,13 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         private class EmptyArgument
         {
             [BooleanArgument( "", DefaultValue = true, Description = "This shouldnt work.", Required = false )]
-            public bool BollProperty { get; set; }
+            public bool BoolProperty { get; set; }
+        }
+
+        private class MismatchedTypeArgument
+        {
+            [BooleanArgument( requiredArgName, DefaultValue = true )]
+            public int IntProperty { get; set; }
         }
     }
 }

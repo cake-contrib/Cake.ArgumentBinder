@@ -46,7 +46,7 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public bool MustExist { get; set; }
 
-        protected override object BaseDefaultValue
+        protected sealed override object BaseDefaultValue
         {
             get
             {

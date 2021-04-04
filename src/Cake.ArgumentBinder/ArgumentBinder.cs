@@ -180,6 +180,14 @@ namespace Cake.ArgumentBinder
                     StringArgumentAttribute argumentAttribute = info.GetCustomAttribute<StringArgumentAttribute>();
                     if( argumentAttribute != null )
                     {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
                         string argumentErrors = argumentAttribute.TryValidate();
                         if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
@@ -221,6 +229,14 @@ namespace Cake.ArgumentBinder
                     BooleanArgumentAttribute argumentAttribute = info.GetCustomAttribute<BooleanArgumentAttribute>();
                     if( argumentAttribute != null )
                     {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
                         string argumentErrors = argumentAttribute.TryValidate();
                         if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
@@ -276,6 +292,14 @@ namespace Cake.ArgumentBinder
                     IntegerArgumentAttribute argumentAttribute = info.GetCustomAttribute<IntegerArgumentAttribute>();
                     if( argumentAttribute != null )
                     {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
                         string argumentErrors = argumentAttribute.TryValidate();
                         if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
@@ -346,6 +370,14 @@ namespace Cake.ArgumentBinder
                     FilePathArgumentAttribute argumentAttribute = info.GetCustomAttribute<FilePathArgumentAttribute>();
                     if( argumentAttribute != null )
                     {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
                         string argumentErrors = argumentAttribute.TryValidate();
                         if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {
@@ -414,6 +446,14 @@ namespace Cake.ArgumentBinder
                     DirectoryPathArgumentAttribute argumentAttribute = info.GetCustomAttribute<DirectoryPathArgumentAttribute>();
                     if( argumentAttribute != null )
                     {
+                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
+                        {
+                            this.exceptions.Add(
+                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
+                            );
+                            continue;
+                        }
+
                         string argumentErrors = argumentAttribute.TryValidate();
                         if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
                         {

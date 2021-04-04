@@ -26,7 +26,7 @@ namespace Cake.ArgumentBinder
         /// </summary>
         public bool DefaultValue { get; set; }
 
-        protected override object BaseDefaultValue
+        protected sealed override object BaseDefaultValue
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Cake.ArgumentBinder
             }
         }
 
-        protected override Type BaseType
+        internal sealed override Type BaseType
         {
             get
             {

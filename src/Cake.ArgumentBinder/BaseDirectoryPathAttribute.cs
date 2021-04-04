@@ -1,11 +1,10 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
 //
 
 using System;
-using System.Text;
 using Cake.Core.IO;
 
 namespace Cake.ArgumentBinder
@@ -21,7 +20,7 @@ namespace Cake.ArgumentBinder
 
         // ---------------- Properties ----------------
 
-        protected override Type BaseType
+        internal sealed override Type BaseType
         {
             get
             {

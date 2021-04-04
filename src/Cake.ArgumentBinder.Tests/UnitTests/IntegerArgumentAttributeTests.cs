@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -254,6 +254,31 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.IsTrue( e.InnerExceptions[0] is ArgumentTooSmallException );
         }
 
+        [Test]
+        public void WrongTypeTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+               () => ArgumentBinderAliases.CreateFromArguments<MismatchedTypeArgument>( this.cakeContext.Object )
+           );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is InvalidPropertyTypeForAttributeException );
+        }
+
+        /// <summary>
+        /// Integers can't be stuffed into a short.
+        /// </summary>
+        [Test]
+        public void ShortTypeTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+               () => ArgumentBinderAliases.CreateFromArguments<ShortTypeArgument>( this.cakeContext.Object )
+           );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is InvalidPropertyTypeForAttributeException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument
@@ -293,6 +318,22 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
                 Max = maxValue
             )]
             public int IntProperty { get; set; }
+        }
+
+        private class MismatchedTypeArgument
+        {
+            [IntegerArgument(
+                requiredArgName
+            )]
+            public string MismatchedType { get; set; }
+        }
+
+        private class ShortTypeArgument
+        {
+            [IntegerArgument(
+                requiredArgName
+            )]
+            public short MismatchedType { get; set; }
         }
     }
 }

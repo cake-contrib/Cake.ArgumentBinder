@@ -62,7 +62,7 @@ namespace Cake.ArgumentBinder
             }
         }
 
-        protected override Type BaseType
+        internal sealed override Type BaseType
         {
             get
             {

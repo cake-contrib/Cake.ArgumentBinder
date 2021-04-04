@@ -23,6 +23,19 @@ namespace Cake.ArgumentBinder
         }
     }
 
+    public class InvalidPropertyTypeForAttributeException : Exception
+    {
+        // ---------------- Constructor ----------------
+
+        public InvalidPropertyTypeForAttributeException(
+            PropertyInfo property,
+            BaseAttribute attribute
+        ) :
+            base( $"The property '{property.DeclaringType.Name}.{property.Name}' is set to type '{property.PropertyType.Name}', which is not compatible with attribute '{attribute.GetType().Name}', which expects a type of '{attribute.BaseType.Name}'." )
+        {
+        }
+    }
+
     /// <summary>
     /// Exception that gets thrown if an argument is required,
     /// but was never specified.

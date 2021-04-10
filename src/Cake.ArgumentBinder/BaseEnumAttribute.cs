@@ -5,12 +5,26 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Cake.ArgumentBinder
 {
+    /// <summary>
+    /// This class helps bind an enum to an argument.  This allows one to limit
+    /// the choices a user is able to pass into the property.
+    /// </summary>
+    /// <remarks>
+    /// Any enum can be used that follows the following rules.  If any
+    /// of these rules are broken, the attribute will not validate,
+    /// and an exception will be thrown when the binding is attempted:
+    /// 
+    /// - The enum must contain at least one value within it.
+    ///   Empty enums are not allowed.
+    /// - If <see cref="BaseAttribute.Required"/> is set to false,
+    ///   the enum must have a value set to 0.  0 is the default value
+    ///   for an enum, and its the only way we can define a default enum value
+    ///   with <see cref="Attribute"/> objects.
+    /// </remarks>
     public abstract class BaseEnumAttribute : BaseAttribute
     {
         // ---------------- Fields ----------------
@@ -32,11 +46,7 @@ namespace Cake.ArgumentBinder
 
             this.enumType = enumType;
 
-            foreach( Enum e in Enum.GetValues( enumType ) )
-            {
-                this.DefaultValue = e;
-                break;
-            }
+            this.DefaultValue = (Enum)Activator.CreateInstance( enumType );
         }
 
         // ---------------- Properties ----------------
@@ -49,7 +59,10 @@ namespace Cake.ArgumentBinder
         /// You can not set this to a specific value because of how attributes work.
         /// <see cref="Enum"/> is not a compile-time constant, so it can not be set
         /// when creating an attribute.  The best we can do for a default value is
-        /// the enum set to 0.
+        /// the enum value set to 0.
+        /// 
+        /// If <see cref="BaseAttribute.Required"/> is set to false, and 
+        /// if an enum does not have a value equal to 0, a validation error will happen.
         /// </remarks>
         public Enum DefaultValue { get; private set; }
 
@@ -87,11 +100,33 @@ namespace Cake.ArgumentBinder
             {
                 builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
             }
-            else if( this.DefaultValue == null )
+
+            Array values = Enum.GetValues( this.enumType );
+            if( values.Length == 0 )
             {
                 builder.AppendLine(
-                    $"{nameof( this.DefaultValue )} is null, is the enum type, {this.BaseType.Name}, an empty enum?"
+                    $"There a no values contained within enum type {this.enumType.Name}.  At least one value must be specified."
                 );
+            }
+
+            if( this.Required == false )
+            {
+                bool foundDefaultValue = false;
+                foreach( Enum value in values )
+                {
+                    if( value.Equals( this.DefaultValue ) )
+                    {
+                        foundDefaultValue = true;
+                        break;
+                    }
+                }
+
+                if( foundDefaultValue == false )
+                {
+                    builder.AppendLine(
+                        $"{nameof(Required)} is set to {false}, but there is no value contained within the enum equal to 0, to represent a default value."
+                    );
+                }
             }
 
             return builder.ToString();

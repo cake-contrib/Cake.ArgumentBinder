@@ -5,8 +5,6 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Cake.Core;
 using Moq;
 using NUnit.Framework;
@@ -231,6 +229,35 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.IsTrue( e.InnerExceptions[0] is ArgumentException );
         }
 
+        [Test]
+        public void RequiredEnumHasNoDefaultValueTest()
+        {
+            const NoDefaultValueEnum expectedValue = NoDefaultValueEnum.Value9;
+
+            this.cakeArgs.Setup(
+                m => m.HasArgument( requiredArgName )
+            ).Returns( true );
+
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                expectedValue.ToString()
+            );
+
+            NoDefaultValueRequiredArgument uut = ArgumentBinderAliases.CreateFromArguments<NoDefaultValueRequiredArgument>( this.cakeContext.Object );
+            Assert.AreEqual( expectedValue, uut.NoDefaultProperty );
+        }
+
+        [Test]
+        public void OptionalEnumHasNoDefaultValueTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+                () => ArgumentBinderAliases.CreateFromArguments<NoDefaultValueOptionalArgument>( this.cakeContext.Object )
+            );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is AttributeValidationException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument
@@ -317,6 +344,26 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public Enum1 Enum1Property { get; set; }
         }
 
+        private class NoDefaultValueRequiredArgument
+        {
+            [EnumArgument(
+                typeof( NoDefaultValueEnum ),
+                requiredArgName,
+                Required = true
+            )]
+            public NoDefaultValueEnum NoDefaultProperty { get; set; }
+        }
+
+        private class NoDefaultValueOptionalArgument
+        {
+            [EnumArgument(
+                typeof( NoDefaultValueEnum ),
+                optionalArgName,
+                Required = false
+            )]
+            public NoDefaultValueEnum NoDefaultProperty { get; set; }
+        }
+
         // ---------------- Helper Enums ----------------
 
         public enum Enum1
@@ -346,6 +393,13 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         public enum EmptyEnum
         {
+        }
+
+        public enum NoDefaultValueEnum
+        {
+            Value9 = -1,
+
+            Value10 = 1
         }
     }
 }

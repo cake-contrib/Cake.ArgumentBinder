@@ -559,7 +559,7 @@ namespace Cake.ArgumentBinder
                             // Need to do a try{} catch{} :/.
                             try
                             {
-                                value = Enum.Parse( argumentAttribute.BaseType, cakeArg ) as Enum;
+                                value = Enum.Parse( argumentAttribute.BaseType, cakeArg, argumentAttribute.IgnoreCase ) as Enum;
                             }
                             catch( ArgumentException )
                             {

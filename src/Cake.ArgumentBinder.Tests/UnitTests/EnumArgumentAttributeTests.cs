@@ -75,6 +75,25 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.AreEqual( expectedValue, uut.Enum1Property );
         }
 
+        [Test]
+        public void HasRequiredArgumentIgnoreCaseTest()
+        {
+            const Enum1 expectedValue = Enum1.Value2;
+
+            this.cakeArgs.Setup(
+                m => m.HasArgument( requiredArgName )
+            ).Returns( true );
+
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                expectedValue.ToString().ToLowerInvariant()
+            );
+
+            RequiredArgumentIgnoreCase uut = ArgumentBinderAliases.CreateFromArguments<RequiredArgumentIgnoreCase>( this.cakeContext.Object );
+            Assert.AreEqual( expectedValue, uut.Enum1Property );
+        }
+
+
         /// <summary>
         /// Ensures that if a required argument is NOT specified,
         /// we get an exception.
@@ -258,6 +277,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Assert.IsTrue( e.InnerExceptions[0] is AttributeValidationException );
         }
 
+        [Test]
+        public void CasingConflictTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+                () => ArgumentBinderAliases.CreateFromArguments<CasingConflictsRequiredArgument>( this.cakeContext.Object )
+            );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is AttributeValidationException );
+        }
+
         // ---------------- Helper Classes ----------------
 
         private class RequiredArgument
@@ -268,6 +298,19 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
                 Description = "A required Enum",
                 HasSecretValue = false,
                 Required = true
+            )]
+            public Enum1 Enum1Property { get; set; }
+        }
+
+        private class RequiredArgumentIgnoreCase
+        {
+            [EnumArgument(
+                typeof( Enum1 ),
+                requiredArgName,
+                Description = "A required Enum that ignores casing",
+                HasSecretValue = false,
+                Required = true,
+                IgnoreCase = true
             )]
             public Enum1 Enum1Property { get; set; }
         }
@@ -364,6 +407,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public NoDefaultValueEnum NoDefaultProperty { get; set; }
         }
 
+        private class CasingConflictsRequiredArgument
+        {
+            [EnumArgument(
+                typeof( CasingConflictsEnum ),
+                requiredArgName,
+                Required = true,
+                IgnoreCase = true
+            )]
+            public CasingConflictsEnum CaseConflictsEnum { get; set; }
+        }
+
         // ---------------- Helper Enums ----------------
 
         public enum Enum1
@@ -400,6 +454,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Value9 = -1,
 
             Value10 = 1
+        }
+
+        public enum CasingConflictsEnum
+        {
+            VaLuE11,
+            value11
         }
     }
 }

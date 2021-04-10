@@ -5,6 +5,8 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Cake.ArgumentBinder
@@ -46,6 +48,7 @@ namespace Cake.ArgumentBinder
 
             this.enumType = enumType;
 
+            this.IgnoreCase = false;
             this.DefaultValue = (Enum)Activator.CreateInstance( enumType );
         }
 
@@ -65,6 +68,15 @@ namespace Cake.ArgumentBinder
         /// if an enum does not have a value equal to 0, a validation error will happen.
         /// </remarks>
         public Enum DefaultValue { get; private set; }
+
+        /// <summary>
+        /// When parsing the enum values, ignore all casing.
+        /// This is defaulted to false.
+        /// 
+        /// If this is set to true, and there are two enum values that, when casing is ignored,
+        /// match, a validation error will happen.
+        /// </summary>
+        public bool IgnoreCase { get; set; }
 
         protected sealed override object BaseDefaultValue => this.DefaultValue;
 
@@ -125,6 +137,25 @@ namespace Cake.ArgumentBinder
                 {
                     builder.AppendLine(
                         $"{nameof(Required)} is set to {false}, but there is no value contained within the enum equal to 0, to represent a default value."
+                    );
+                }
+            }
+
+            if( this.IgnoreCase )
+            {
+                List<string> listedValues = new List<string>();
+                foreach( Enum value in values )
+                {
+                    listedValues.Add( value.ToString().ToLowerInvariant() );
+                }
+
+                if( listedValues.Distinct().Count() != listedValues.Count )
+                {
+                    builder.AppendLine(
+                        $"Since {nameof( this.IgnoreCase )} is set to true, there are multiple values an argument can be assigned to."
+                    );
+                    builder.AppendLine(
+                        "Please ensure all enum values are unique when casing is ignored."
                     );
                 }
             }

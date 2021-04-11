@@ -8,6 +8,7 @@ using System;
 
 namespace Cake.ArgumentBinder
 {
+    /// <inheritdoc/>
     [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
     public sealed class EnumArgumentAttribute : BaseEnumAttribute, IReadOnlyArgumentAttribute
     {

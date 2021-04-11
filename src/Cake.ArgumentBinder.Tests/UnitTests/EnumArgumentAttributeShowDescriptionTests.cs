@@ -4,29 +4,29 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
+using System;
+using System.Collections.Generic;
+using System.Text;
 using NUnit.Framework;
 
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class IntegerArgumentAttributeShowDescriptionTests
+    public sealed class EnumArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
         private const string taskDescription = "Task Description";
-        private const string argumentName = "int_argument";
+        private const string argumentName = "enum_argument";
         private const string argDescription = "Some Description";
-        private const int defaultValue = 1;
-        private const int minValue = -1;
-        private const int maxValue = 3;
 
         // ---------------- Tests ----------------
 
         [Test]
-        public void IntegerArgumentNotHiddenNotRequiredTest()
+        public void EnumArugmentNotHiddenNotRequiredDontIgnoreCaseTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentNotHiddenNotRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<EnumArgumentNotHiddenNotRequiredDontIgnoreCase>( taskDescription );
 
             // Check
 
@@ -43,24 +43,32 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.DefaultValuePrefix}: {defaultValue}",
+                $"{BaseAttribute.DefaultValuePrefix}: {default( TestEnum )}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
+                $"{BaseEnumAttribute.CasingIgnorePrefix}: {false}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
+                BaseEnumAttribute.PossibleValuePrefix,
                 actualDescription
             );
+
+            foreach( Enum value in Enum.GetValues( typeof( TestEnum ) ) )
+            {
+                TestHelpers.EnsureLineExistsFromMultiLineString(
+                    $"- {value}",
+                    actualDescription
+                );
+            }
 
             // -------- Lines that should NOT there --------
 
@@ -76,10 +84,10 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
-        public void IntegerArgumentNotHiddenButRequiredTest()
+        public void EnumArugmentNotHiddenRequiredIgnoreCaseTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentNotHiddenButRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<EnumArgumentNotHiddenButRequiredIgnoreCase>( taskDescription );
 
             // Check
 
@@ -96,19 +104,27 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
+                $"{BaseEnumAttribute.CasingIgnorePrefix}: {true}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
+                BaseEnumAttribute.PossibleValuePrefix,
                 actualDescription
             );
+
+            foreach( Enum value in Enum.GetValues( typeof( TestEnum ) ) )
+            {
+                TestHelpers.EnsureLineExistsFromMultiLineString(
+                    $"- {value}",
+                    actualDescription
+                );
+            }
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.RequiredPrefix}: {true}",
@@ -117,8 +133,6 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             // -------- Lines that should NOT there --------
 
-            // Required argument, default value is not needed.
-            // Should not print it.
             TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
                 BaseAttribute.DefaultValuePrefix,
                 actualDescription
@@ -131,10 +145,10 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
-        public void IntegerArgumentHiddenNotRequiredTest()
+        public void EnumArugmentHiddenNotRequiredIgnoreCaseTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentHiddenNotRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<EnumArgumentHiddenNotRequiredIgnoreCase>( taskDescription );
 
             // Check
 
@@ -151,7 +165,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.ValueIsSecretPrefix}: {true}",
                 actualDescription
             );
 
@@ -161,12 +180,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
-                actualDescription
-            );
-
-            TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{BaseEnumAttribute.CasingIgnorePrefix}: {true}",
                 actualDescription
             );
 
@@ -176,13 +190,26 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
                 BaseAttribute.RequiredPrefix,
                 actualDescription
             );
+
+            TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
+                BaseEnumAttribute.PossibleValuePrefix,
+                actualDescription
+            );
+
+            foreach( Enum value in Enum.GetValues( typeof( TestEnum ) ) )
+            {
+                TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
+                    value.ToString(),
+                    actualDescription
+                );
+            }
         }
 
         [Test]
-        public void IntegerArgumentHiddenAndRequiredTest()
+        public void EnumArgumentHiddenAndRequiredDontIgnoreCaseTest()
         {
             // Act
-            string actualDescription = ArgumentBinder.GetDescription<IntegerArgumentHiddenAndRequired>( taskDescription );
+            string actualDescription = ArgumentBinder.GetDescription<EnumArgumentHiddenAndRequiredDontIgnoreCase>( taskDescription );
 
             // Check
 
@@ -199,17 +226,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseAttribute.TypePrefix}: {typeof( int ).Name}",
+                $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{BaseAttribute.ValueIsSecretPrefix}: {true}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{BaseEnumAttribute.CasingIgnorePrefix}: {false}",
                 actualDescription
             );
 
@@ -220,70 +247,88 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             // -------- Lines that should NOT there --------
 
-            // Required argument, default value is not needed.
-            // Should not print it.
             TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
                 BaseAttribute.DefaultValuePrefix,
                 actualDescription
             );
+
+            TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
+                BaseEnumAttribute.PossibleValuePrefix,
+                actualDescription
+            );
+
+            foreach( Enum value in Enum.GetValues( typeof( TestEnum ) ) )
+            {
+                TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
+                    value.ToString(),
+                    actualDescription
+                );
+            }
         }
 
         // ---------------- Helper Classes ----------------
 
-        public class IntegerArgumentNotHiddenNotRequired
+        private class EnumArgumentNotHiddenNotRequiredDontIgnoreCase
         {
-            [IntegerArgument(
+            [EnumArgument(
+                typeof( TestEnum ),
                 argumentName,
                 Description = argDescription,
-                DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = false,
-                Required = false
+                Required = false,
+                IgnoreCase = false
             )]
-            public int IntegerArgument { get; set; }
+            public TestEnum EnumArgument { get; set; }
         }
 
-        public class IntegerArgumentNotHiddenButRequired
+        private class EnumArgumentNotHiddenButRequiredIgnoreCase
         {
-            [IntegerArgument(
+            [EnumArgument(
+                typeof( TestEnum ),
                 argumentName,
                 Description = argDescription,
-                DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = false,
-                Required = true
+                Required = true,
+                IgnoreCase = true
             )]
-            public int IntegerArgument { get; set; }
+            public TestEnum EnumArgument { get; set; }
         }
 
-        public class IntegerArgumentHiddenNotRequired
+        private class EnumArgumentHiddenNotRequiredIgnoreCase
         {
-            [IntegerArgument(
+            [EnumArgument(
+                typeof( TestEnum ),
                 argumentName,
                 Description = argDescription,
-                DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = true,
-                Required = false
+                Required = false,
+                IgnoreCase = true
             )]
-            public int IntegerArgument { get; set; }
+            public TestEnum EnumArgument { get; set; }
         }
 
-        public class IntegerArgumentHiddenAndRequired
+        private class EnumArgumentHiddenAndRequiredDontIgnoreCase
         {
-            [IntegerArgument(
+            [EnumArgument(
+                typeof( TestEnum ),
                 argumentName,
                 Description = argDescription,
-                DefaultValue = defaultValue,
-                Min = minValue,
-                Max = maxValue,
                 HasSecretValue = true,
-                Required = true
+                Required = true,
+                IgnoreCase = false
             )]
-            public int IntegerArgument { get; set; }
+            public TestEnum EnumArgument { get; set; }
+        }
+
+        // ---------------- Helper Enums ----------------
+
+        private enum TestEnum
+        {
+            Value1,
+
+            Value2,
+
+            Value3
         }
     }
 }

@@ -33,8 +33,8 @@ namespace Cake.ArgumentBinder
 
         private readonly Type enumType;
 
-        internal static readonly string possibleValuePrefix = "Possible values";
-        internal static readonly string casingIgnorePrefix = "Casing is ignored";
+        internal static readonly string PossibleValuePrefix = "Possible values";
+        internal static readonly string CasingIgnorePrefix = "Casing is ignored";
 
         // ---------------- Constructor ----------------
 
@@ -92,16 +92,16 @@ namespace Cake.ArgumentBinder
             StringBuilder builder = new StringBuilder();
             this.ToString( builder );
 
+            builder.AppendLine( $"\t\t{CasingIgnorePrefix}: {this.IgnoreCase}" );
+
             if( this.HasSecretValue == false )
             {
-                builder.AppendLine( $"\t\t{possibleValuePrefix}:" );
+                builder.AppendLine( $"\t\t{PossibleValuePrefix}:" );
                 foreach( Enum e in Enum.GetValues( this.BaseType ) )
                 {
                     builder.AppendLine( $"\t\t\t- {e}" );
                 }
             }
-
-            builder.AppendLine( $"\t\t{casingIgnorePrefix}: {this.IgnoreCase}" );
 
             return builder.ToString();
         }

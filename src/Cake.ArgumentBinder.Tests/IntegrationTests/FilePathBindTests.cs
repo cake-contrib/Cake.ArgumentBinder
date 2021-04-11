@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright Seth Hendrick 2019-2021.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
@@ -151,7 +151,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
         // ---------------- Helper Classes ----------------
 
-        public class FilePathBind
+        private sealed class FilePathBind
         {
             // ---------------- Fields ----------------
 
@@ -217,6 +217,9 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             }
         }
 
+        /// <remarks>
+        /// Must be public so <see cref="Frosting"/> can find it.
+        /// </remarks>
         [TaskName( nameof( FilePathBindTask ) )]
         public class FilePathBindTask : BaseFrostingTask
         {

@@ -152,7 +152,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
         // ---------------- Helper Classes ----------------
 
-        public sealed class IntegerBind
+        private sealed class IntegerBind
         {
             // ---------------- Fields ----------------
 
@@ -194,6 +194,9 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             }
         }
 
+        /// <remarks>
+        /// Must be public so <see cref="Frosting"/> can find it.
+        /// </remarks>
         [TaskName( nameof( IntegerBindTest ) )]
         public sealed class IntegerBindTest : BaseFrostingTask
         {

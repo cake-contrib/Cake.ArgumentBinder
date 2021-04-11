@@ -101,7 +101,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
         // ---------------- Helper Classes ----------------
 
-        public class BooleanBind
+        private sealed class BooleanBind
         {
             // ---------------- Fields ----------------
 
@@ -139,6 +139,9 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             }
         }
 
+        /// <remarks>
+        /// Must be public so <see cref="Frosting"/> can find it.
+        /// </remarks>
         [TaskName( nameof( BooleanBindTask ) )]
         public class BooleanBindTask : BaseFrostingTask
         {

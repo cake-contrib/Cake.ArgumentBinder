@@ -21,6 +21,8 @@ namespace Cake.ArgumentBinder
 
         internal static readonly string TypePrefix = "Type";
 
+        internal static readonly string DefaultArgumentDescription = "(No Description Given)";
+
         // ---------------- Constructor ----------------
 
         protected BaseAttribute( string arg )
@@ -66,14 +68,6 @@ namespace Cake.ArgumentBinder
 
         // ---------------- Functions ----------------
 
-        public override string ToString()
-        {
-            StringBuilder builder = new StringBuilder();
-            this.ToString( builder );
-
-            return builder.ToString();
-        }
-
         /// <summary>
         /// Appends this class's string representation to the passed
         /// in string builder object.
@@ -86,7 +80,7 @@ namespace Cake.ArgumentBinder
             builder.AppendLine( "\t --" + this.ArgName );
             if( string.IsNullOrEmpty( this.Description ) )
             {
-                builder.AppendLine( "\t\t(No Description Given)." );
+                builder.AppendLine( $"\t\t{DefaultArgumentDescription}." );
             }
             else
             {

@@ -255,6 +255,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
+        public void MinGreaterThanMaxTest()
+        {
+            AggregateException e = Assert.Throws<AggregateException>(
+                () => ArgumentBinderAliases.CreateFromArguments<MinGreaterThanMaxArgument>( this.cakeContext.Object )
+            );
+
+            Assert.AreEqual( 1, e.InnerExceptions.Count );
+            Assert.IsTrue( e.InnerExceptions[0] is AttributeValidationException );
+        }
+
+        [Test]
         public void WrongTypeTest()
         {
             AggregateException e = Assert.Throws<AggregateException>(
@@ -281,7 +292,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Helper Classes ----------------
 
-        private class RequiredArgument
+        private sealed class RequiredArgument
         {
             [IntegerArgument(
                 requiredArgName,
@@ -294,7 +305,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public int IntProperty { get; set; }
         }
 
-        private class OptionalArgument
+        private sealed class OptionalArgument
         {
             [IntegerArgument(
                 optionalArgName,
@@ -307,7 +318,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public int IntProperty { get; set; }
         }
 
-        private class EmptyArgument
+        private sealed class EmptyArgument
         {
             [IntegerArgument(
                 "",
@@ -320,7 +331,17 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public int IntProperty { get; set; }
         }
 
-        private class MismatchedTypeArgument
+        private sealed class MinGreaterThanMaxArgument
+        {
+            [IntegerArgument(
+                requiredArgName,
+                Min = 1,
+                Max = 0
+            )]
+            public int IntProperty { get; set; }
+        }
+
+        private sealed class MismatchedTypeArgument
         {
             [IntegerArgument(
                 requiredArgName
@@ -328,7 +349,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public string MismatchedType { get; set; }
         }
 
-        private class ShortTypeArgument
+        private sealed class ShortTypeArgument
         {
             [IntegerArgument(
                 requiredArgName

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class StringArgumentAttributeShowDescriptionTests
+    public sealed class StringArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
@@ -227,7 +227,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Helper Classes ----------------
 
-        public class StringArgumentNotHiddenNotRequired
+        private class StringArgumentNotHiddenNotRequired
         {
             [StringArgument(
                 argumentName,
@@ -239,7 +239,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public string StringArgument { get; set; }
         }
 
-        public class StringArgumentNotHiddenButRequired
+        private class StringArgumentNotHiddenButRequired
         {
             [StringArgument(
                 argumentName,
@@ -251,7 +251,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public string StringArgument { get; set; }
         }
 
-        public class StringArgumentHiddenNotRequired
+        private class StringArgumentHiddenNotRequired
         {
             [StringArgument(
                 argumentName,
@@ -263,7 +263,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public string StringArgument { get; set; }
         }
 
-        public class StringArgumentHiddenAndRequired
+        private class StringArgumentHiddenAndRequired
         {
             [StringArgument(
                 argumentName,
@@ -275,7 +275,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public string StringArgument { get; set; }
         }
 
-        public class StringArgumentNullDefaultValue
+        private class StringArgumentNullDefaultValue
         {
             [StringArgument(
                 argumentName,

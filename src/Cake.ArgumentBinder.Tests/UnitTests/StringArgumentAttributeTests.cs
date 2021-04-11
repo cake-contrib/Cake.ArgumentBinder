@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class StringArgumentAttributeTests
+    public sealed class StringArgumentAttributeTests
     {
         // ---------------- Fields ----------------
 

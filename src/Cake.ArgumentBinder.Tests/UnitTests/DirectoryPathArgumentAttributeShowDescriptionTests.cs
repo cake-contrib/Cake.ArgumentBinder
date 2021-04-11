@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class DirectoryPathArgumentAttributeShowDescriptionTests
+    public sealed class DirectoryPathArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
@@ -254,7 +254,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Helper Classes ----------------
 
-        public class DirectoryPathArgumentNotHiddenNotRequiredNotExisting
+        private class DirectoryPathArgumentNotHiddenNotRequiredNotExisting
         {
             [DirectoryPathArgument(
                 argumentName,
@@ -267,7 +267,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public DirectoryPath DirectoryPathArgument { get; set; }
         }
 
-        public class DirectoryPathArgumentNotHiddenButRequiredNotExisting
+        private class DirectoryPathArgumentNotHiddenButRequiredNotExisting
         {
             [DirectoryPathArgument(
                 argumentName,
@@ -280,7 +280,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public DirectoryPath DirectoryPathArgument { get; set; }
         }
 
-        public class DirectoryPathArgumentHiddenNotRequiredMustExist
+        private class DirectoryPathArgumentHiddenNotRequiredMustExist
         {
             [DirectoryPathArgument(
                 argumentName,
@@ -293,7 +293,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public DirectoryPath DirectoryPathArgument { get; set; }
         }
 
-        public class DirectoryPathArgumentHiddenAndRequiredNotExisting
+        private class DirectoryPathArgumentHiddenAndRequiredNotExisting
         {
             [DirectoryPathArgument(
                 argumentName,
@@ -306,7 +306,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public DirectoryPath DirectoryPathArgument { get; set; }
         }
 
-        public class DirectoryPathArgumentNullDefaultValueNotExisting
+        private class DirectoryPathArgumentNullDefaultValueNotExisting
         {
             [DirectoryPathArgument(
                 argumentName,

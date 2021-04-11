@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class BooleanArgumentAttributeShowDescriptionTests
+    public sealed class BooleanArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
@@ -183,7 +183,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Test Helpers ----------------
 
-        public class BooleanArgumentNotHiddenNotRequired
+        private class BooleanArgumentNotHiddenNotRequired
         {
             [BooleanArgument(
                 argumentName,
@@ -195,7 +195,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public bool BooleanArgument { get; set; }
         }
 
-        public class BooleanArgumentNotHiddenButRequired
+        private class BooleanArgumentNotHiddenButRequired
         {
             [BooleanArgument(
                 argumentName,
@@ -207,7 +207,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public bool BooleanArgument { get; set; }
         }
 
-        public class BooleanArgumentHiddenNotRequired
+        private class BooleanArgumentHiddenNotRequired
         {
             [BooleanArgument(
                 argumentName,
@@ -219,7 +219,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public bool BooleanArgument { get; set; }
         }
 
-        public class BooleanArgumentHiddenAndRequired
+        private class BooleanArgumentHiddenAndRequired
         {
             [BooleanArgument(
                 argumentName,

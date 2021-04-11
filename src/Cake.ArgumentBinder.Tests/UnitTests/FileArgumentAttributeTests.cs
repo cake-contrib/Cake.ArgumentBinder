@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class FileArgumentAttributeTests
+    public sealed class FileArgumentAttributeTests
     {
         // ---------------- Fields ----------------
 

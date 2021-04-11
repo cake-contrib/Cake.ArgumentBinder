@@ -420,14 +420,14 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Helper Enums ----------------
 
-        public enum Enum1
+        private enum Enum1
         {
             Value1,
 
             Value2
         }
 
-        public enum Enum2
+        private enum Enum2
         {
             Value3 = -2,
 
@@ -436,7 +436,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Value5 = 2
         }
 
-        public enum Enum3
+        private enum Enum3
         {
             Value6 = 2,
 
@@ -445,18 +445,18 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             Value8 = 0
         }
 
-        public enum EmptyEnum
+        private enum EmptyEnum
         {
         }
 
-        public enum NoDefaultValueEnum
+        private enum NoDefaultValueEnum
         {
             Value9 = -1,
 
             Value10 = 1
         }
 
-        public enum CasingConflictsEnum
+        private enum CasingConflictsEnum
         {
             VaLuE11,
             value11

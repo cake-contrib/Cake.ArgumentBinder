@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.UnitTests
 {
     [TestFixture]
-    public class FilePathArgumentAttributeShowDescriptionTests
+    public sealed class FilePathArgumentAttributeShowDescriptionTests
     {
         // ---------------- Fields ----------------
 
@@ -254,7 +254,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
         // ---------------- Helper Classes ----------------
 
-        public class FilePathArgumentNotHiddenNotRequiredNotExisting
+        private class FilePathArgumentNotHiddenNotRequiredNotExisting
         {
             [FilePathArgument(
                 argumentName,
@@ -267,7 +267,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public FilePath FilePathArgument { get; set; }
         }
 
-        public class FilePathArgumentNotHiddenButRequiredNotExisting
+        private class FilePathArgumentNotHiddenButRequiredNotExisting
         {
             [FilePathArgument(
                 argumentName,
@@ -280,7 +280,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public FilePath FilePathArgument { get; set; }
         }
 
-        public class FilePathArgumentHiddenNotRequiredMustExist
+        private class FilePathArgumentHiddenNotRequiredMustExist
         {
             [FilePathArgument(
                 argumentName,
@@ -293,7 +293,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public FilePath FilePathArgument { get; set; }
         }
 
-        public class FilePathArgumentHiddenAndRequiredNotExisting
+        private class FilePathArgumentHiddenAndRequiredNotExisting
         {
             [FilePathArgument(
                 argumentName,
@@ -306,7 +306,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             public FilePath FilePathArgument { get; set; }
         }
 
-        public class FilePathArgumentNullDefaultValueNotExisting
+        private class FilePathArgumentNullDefaultValueNotExisting
         {
             [FilePathArgument(
                 argumentName,

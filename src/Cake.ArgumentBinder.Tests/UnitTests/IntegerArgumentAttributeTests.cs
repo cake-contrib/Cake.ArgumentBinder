@@ -266,6 +266,22 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
         }
 
         [Test]
+        public void MinEqualsMaxTest()
+        {
+            this.cakeArgs.Setup(
+                m => m.HasArgument( requiredArgName )
+            ).Returns( true );
+
+            this.cakeArgs.SetupGetArgumentSingle(
+                requiredArgName,
+                defaultValue.ToString()
+            );
+
+            MinEqualsMaxArgument uut = ArgumentBinderAliases.CreateFromArguments<MinEqualsMaxArgument>( this.cakeContext.Object );
+            Assert.AreEqual( defaultValue, uut.IntProperty );
+        }
+
+        [Test]
         public void WrongTypeTest()
         {
             AggregateException e = Assert.Throws<AggregateException>(
@@ -337,6 +353,18 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
                 requiredArgName,
                 Min = 1,
                 Max = 0
+            )]
+            public int IntProperty { get; set; }
+        }
+
+        private sealed class MinEqualsMaxArgument
+        {
+            // ---------------- Properties ----------------
+
+            [IntegerArgument(
+                requiredArgName,
+                Min = defaultValue,
+                Max = defaultValue
             )]
             public int IntProperty { get; set; }
         }

@@ -110,5 +110,11 @@ namespace Cake.ArgumentBinder
                 builder.AppendLine( $"\t\t{ValueIsSecretPrefix}: {this.HasSecretValue}." );
             }
         }
+
+        /// <summary>
+        /// Validates this object.  Returns <see cref="string.Empty"/>
+        /// if nothing is wrong, otherwise this returns an error message.
+        /// </summary>
+        internal abstract string TryValidate();
     }
 }

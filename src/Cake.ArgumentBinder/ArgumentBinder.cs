@@ -6,11 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Text;
+using Cake.ArgumentBinder.Binders;
+using Cake.ArgumentBinder.Binders.Argument;
 using Cake.Core;
-using Cake.Core.IO;
 
 namespace Cake.ArgumentBinder
 {
@@ -176,427 +176,44 @@ namespace Cake.ArgumentBinder
 
             private void TryStringArguments()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    StringArgumentAttribute argumentAttribute = info.GetCustomAttribute<StringArgumentAttribute>();
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                        }
-                        else if( argumentAttribute.Required )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-                        else
-                        {
-                            cakeArg = argumentAttribute.DefaultValue;
-                        }
-
-                        info.SetValue(
-                            instance,
-                            cakeArg
-                        );
-                    }
-                }
+                ArgumentStringBinder<T> binder = new ArgumentStringBinder<T>( this.cakeContext );
+                this.DoBind( binder );
             }
 
             private void TryBooleanArguments()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    BooleanArgumentAttribute argumentAttribute = info.GetCustomAttribute<BooleanArgumentAttribute>();
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        bool? value = null;
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                            if( bool.TryParse( cakeArg, out bool result ) )
-                            {
-                                value = result;
-                            }
-                            else
-                            {
-                                this.exceptions.Add(
-                                    new ArgumentFormatException( typeof( bool ), argumentAttribute.ArgName )
-                                );
-                                continue;
-                            }
-                        }
-
-                        if( argumentAttribute.Required && ( value == null ) )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-
-                        if( value == null )
-                        {
-                            value = argumentAttribute.DefaultValue;
-                        }
-
-                        info.SetValue(
-                            instance,
-                            value.Value
-                        );
-                    }
-                }
+                ArgumentBooleanBinder<T> binder = new ArgumentBooleanBinder<T>( this.cakeContext );
+                this.DoBind( binder );
             }
 
             private void TryIntegerArguments()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    IntegerArgumentAttribute argumentAttribute = info.GetCustomAttribute<IntegerArgumentAttribute>();
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        int? value = null;
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                            if( int.TryParse( cakeArg, out int result ) )
-                            {
-                                if( result > argumentAttribute.Max )
-                                {
-                                    this.exceptions.Add(
-                                        new ArgumentTooLargeException( argumentAttribute.Max.ToString(), argumentAttribute.ArgName )
-                                    );
-                                    continue;
-                                }
-                                if( result < argumentAttribute.Min )
-                                {
-                                    this.exceptions.Add(
-                                        new ArgumentTooSmallException( argumentAttribute.Min.ToString(), argumentAttribute.ArgName )
-                                    );
-                                    continue;
-                                }
-
-                                value = result;
-                            }
-                            else
-                            {
-                                this.exceptions.Add(
-                                    new ArgumentFormatException( typeof( int ), argumentAttribute.ArgName )
-                                );
-                                continue;
-                            }
-                        }
-
-                        if( argumentAttribute.Required && ( value == null ) )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-
-                        if( value == null )
-                        {
-                            value = argumentAttribute.DefaultValue;
-                        }
-
-                        info.SetValue(
-                            instance,
-                            value.Value
-                        );
-                    }
-                }
+                ArgumentIntegerBinder<T> binder = new ArgumentIntegerBinder<T>( this.cakeContext );
+                this.DoBind( binder );
             }
 
             private void TryFilePathArguments()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    FilePathArgumentAttribute argumentAttribute = info.GetCustomAttribute<FilePathArgumentAttribute>();
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                        }
-                        else if( argumentAttribute.Required )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-                        else
-                        {
-                            cakeArg = argumentAttribute.DefaultValue?.ToString() ?? null;
-                        }
-
-                        FilePath value = ( cakeArg != null ) ? new FilePath( cakeArg ) : null;
-
-                        if( argumentAttribute.MustExist && ( value == null ) )
-                        {
-                            this.exceptions.Add(
-                                new ArgumentValueNullException(
-                                    argumentAttribute.ArgName
-                                )
-                            );
-                            continue;
-                        }
-
-                        if( argumentAttribute.MustExist )
-                        {
-                            IFile file = cakeContext.FileSystem.GetFile( value );
-                            if( ( file == null ) || ( file.Exists == false ) )
-                            {
-                                this.exceptions.Add(
-                                    new FileNotFoundException(
-                                        "File must exist before executing cake task.",
-                                        value.ToString()
-                                    )
-                                );
-                                continue;
-                            }
-                        }
-
-                        info.SetValue(
-                            instance,
-                            value
-                        );
-                    }
-                }
+                ArgumentFilePathBinder<T> binder = new ArgumentFilePathBinder<T>( this.cakeContext );
+                this.DoBind( binder );
             }
 
             private void TryDirectoryPathArguments()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    DirectoryPathArgumentAttribute argumentAttribute = info.GetCustomAttribute<DirectoryPathArgumentAttribute>();
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-                        }
-                        else if( argumentAttribute.Required )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-                        else
-                        {
-                            cakeArg = argumentAttribute.DefaultValue?.ToString() ?? null;
-                        }
-
-                        DirectoryPath value = ( cakeArg != null ) ? new DirectoryPath( cakeArg ) : null;
-
-                        if( argumentAttribute.MustExist && ( value == null ) )
-                        {
-                            this.exceptions.Add(
-                                new ArgumentValueNullException(
-                                    argumentAttribute.ArgName
-                                )
-                            );
-                            continue;
-                        }
-
-                        if( argumentAttribute.MustExist )
-                        {
-                            IDirectory dir = cakeContext.FileSystem.GetDirectory( value );
-                            if( ( dir == null ) || ( dir.Exists == false ) )
-                            {
-                                this.exceptions.Add(
-                                    new DirectoryNotFoundException(
-                                        "Directory must exist before executing cake task."
-                                    )
-                                );
-                                continue;
-                            }
-                        }
-
-                        info.SetValue(
-                            instance,
-                            value
-                        );
-                    }
-                }
+                ArgumentDirectoryPathBinder<T> binder = new ArgumentDirectoryPathBinder<T>( this.cakeContext );
+                this.DoBind( binder );
             }
 
             private void TryEnumAttributes()
             {
-                foreach( PropertyInfo info in this.properties )
-                {
-                    EnumArgumentAttribute argumentAttribute;
-                    try
-                    {
-                        argumentAttribute = info.GetCustomAttribute<EnumArgumentAttribute>();
-                    }
-                    catch( ArgumentException e )
-                    {
-                        this.exceptions.Add( e );
-                        continue;
-                    }
+                ArgumentEnumBinder<T> binder = new ArgumentEnumBinder<T>( this.cakeContext );
+                DoBind( binder );
+            }
 
-                    if( argumentAttribute != null )
-                    {
-                        if( argumentAttribute.BaseType.IsAssignableFrom( info.PropertyType ) == false )
-                        {
-                            this.exceptions.Add(
-                                new InvalidPropertyTypeForAttributeException( info, argumentAttribute )
-                            );
-                            continue;
-                        }
-
-                        string argumentErrors = argumentAttribute.TryValidate();
-                        if( string.IsNullOrWhiteSpace( argumentErrors ) == false )
-                        {
-                            this.exceptions.Add(
-                                new AttributeValidationException( info, argumentErrors )
-                            );
-                            continue;
-                        }
-
-                        Enum value = null;
-                        string cakeArg;
-                        if( cakeContext.Arguments.HasArgument( argumentAttribute.ArgName ) )
-                        {
-                            cakeArg = cakeContext.Arguments.GetArgument( argumentAttribute.ArgName );
-
-                            // No TryParse (well, no TryParse that doesn't require a generic).
-                            // Need to do a try{} catch{} :/.
-                            try
-                            {
-                                value = Enum.Parse( argumentAttribute.BaseType, cakeArg, argumentAttribute.IgnoreCase ) as Enum;
-                            }
-                            catch( ArgumentException )
-                            {
-                                this.exceptions.Add(
-                                    new ArgumentFormatException( argumentAttribute.BaseType, argumentAttribute.ArgName )
-                                );
-                                continue;
-                            }
-
-                            if( value == null )
-                            {
-                                this.exceptions.Add(
-                                    new ArgumentFormatException( argumentAttribute.BaseType, argumentAttribute.ArgName )
-                                );
-                                continue;
-                            }
-                        }
-
-                        if( argumentAttribute.Required && ( value == null ) )
-                        {
-                            this.exceptions.Add(
-                                new MissingRequiredArgumentException( argumentAttribute.ArgName )
-                            );
-                            continue;
-                        }
-
-                        if( value == null )
-                        {
-                            value = argumentAttribute.DefaultValue;
-                        }
-
-                        info.SetValue(
-                            instance,
-                            value
-                        );
-                    }
-                }
+            private void DoBind<TAttribute>( BaseBinder<T, TAttribute> binder ) where TAttribute : BaseAttribute
+            {
+                binder.Bind( this.instance, this.properties );
+                this.exceptions.AddRange( binder.Exceptions );
             }
         }
     }

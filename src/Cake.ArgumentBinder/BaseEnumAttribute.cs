@@ -106,11 +106,8 @@ namespace Cake.ArgumentBinder
             return builder.ToString();
         }
 
-        /// <summary>
-        /// Validates this object.  Returns <see cref="string.Empty"/>
-        /// if nothing is wrong, otherwise this returns an error message.
-        /// </summary>
-        internal string TryValidate()
+        /// <inheritdoc/>
+        internal override string TryValidate()
         {
             StringBuilder builder = new StringBuilder();
             if( string.IsNullOrWhiteSpace( this.ArgName ) )

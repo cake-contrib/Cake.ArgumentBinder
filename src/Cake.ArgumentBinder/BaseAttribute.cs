@@ -13,6 +13,8 @@ namespace Cake.ArgumentBinder
     {
         // ---------------- Fields ----------------
 
+        private const ArgumentSource defaultArgumentSource = ArgumentSource.CommandLine;
+
         internal static readonly string RequiredPrefix = "Required";
 
         internal static readonly string DefaultValuePrefix = "Default Value";
@@ -34,6 +36,8 @@ namespace Cake.ArgumentBinder
         }
 
         // ---------------- Properties ----------------
+
+        public static ArgumentSource DefaultArgumentSource => defaultArgumentSource;
 
         /// <summary>
         /// The name of the argument that is passed in via the command-line.

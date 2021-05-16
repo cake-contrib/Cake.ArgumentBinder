@@ -67,12 +67,12 @@ namespace Cake.ArgumentBinder.Binders
             }
         }
 
-        protected bool HasArgument( string argumentName )
+        protected bool HasArgument( string argumentName, TAttribute attribute )
         {
             return this.cakeContext.Arguments.HasArgument( argumentName );
         }
 
-        protected string GetArgument( string argumentName )
+        protected string GetArgument( string argumentName, TAttribute attribute )
         {
             return this.cakeContext.Arguments.GetArgument( argumentName );
         }

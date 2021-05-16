@@ -24,9 +24,9 @@ namespace Cake.ArgumentBinder.Binders
         {
             bool? value = null;
             string cakeArg;
-            if( this.HasArgument( attribute.ArgName ) )
+            if( this.HasArgument( attribute.ArgName, attribute ) )
             {
-                cakeArg = this.GetArgument( attribute.ArgName );
+                cakeArg = this.GetArgument( attribute.ArgName, attribute );
                 if( bool.TryParse( cakeArg, out bool result ) )
                 {
                     value = result;

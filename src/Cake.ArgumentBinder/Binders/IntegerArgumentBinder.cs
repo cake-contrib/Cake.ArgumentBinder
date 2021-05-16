@@ -24,9 +24,9 @@ namespace Cake.ArgumentBinder.Binders
         {
             int? value = null;
             string cakeArg;
-            if( this.HasArgument( attribute.ArgName ) )
+            if( this.HasArgument( attribute.ArgName, attribute ) )
             {
-                cakeArg = this.GetArgument( attribute.ArgName );
+                cakeArg = this.GetArgument( attribute.ArgName, attribute );
                 if( int.TryParse( cakeArg, out int result ) )
                 {
                     if( result > attribute.Max )

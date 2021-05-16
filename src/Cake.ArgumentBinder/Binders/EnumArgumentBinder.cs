@@ -25,9 +25,9 @@ namespace Cake.ArgumentBinder.Binders
         {
             Enum value = null;
             string cakeArg;
-            if( this.HasArgument( attribute.ArgName ) )
+            if( this.HasArgument( attribute.ArgName, attribute ) )
             {
-                cakeArg = this.GetArgument( attribute.ArgName );
+                cakeArg = this.GetArgument( attribute.ArgName, attribute );
 
                 // No TryParse (well, no TryParse that doesn't require a generic).
                 // Need to do a try{} catch{} :/.

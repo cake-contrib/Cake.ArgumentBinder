@@ -25,9 +25,9 @@ namespace Cake.ArgumentBinder.Binders
         protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, FilePathArgumentAttribute attribute )
         {
             string cakeArg;
-            if( this.HasArgument( attribute.ArgName ) )
+            if( this.HasArgument( attribute.ArgName, attribute ) )
             {
-                cakeArg = this.GetArgument( attribute.ArgName );
+                cakeArg = this.GetArgument( attribute.ArgName, attribute );
             }
             else if( attribute.Required )
             {

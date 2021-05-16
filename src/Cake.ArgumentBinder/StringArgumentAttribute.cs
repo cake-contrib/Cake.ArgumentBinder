@@ -20,7 +20,12 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public StringArgumentAttribute( string argumentName ) :
-            base( argumentName )
+            this( argumentName, DefaultArgumentSource )
+        {
+        }
+
+        public StringArgumentAttribute( string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
             this.DefaultValue = string.Empty;
         }

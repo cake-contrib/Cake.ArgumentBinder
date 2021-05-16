@@ -28,9 +28,10 @@ namespace Cake.ArgumentBinder
 
         // ---------------- Constructor ----------------
 
-        protected BaseAttribute( string arg )
+        protected BaseAttribute( string argumentName, ArgumentSource argumentSource )
         {
-            this.ArgName = arg;
+            this.ArgName = argumentName;
+            this.ArgumentSource = argumentSource;
             this.Description = string.Empty;
             this.Required = false;
             this.HasSecretValue = false;
@@ -44,6 +45,11 @@ namespace Cake.ArgumentBinder
         /// The name of the argument that is passed in via the command-line.
         /// </summary>
         public string ArgName { get; set; }
+
+        /// <summary>
+        /// Where to find the argument's value.
+        /// </summary>
+        public ArgumentSource ArgumentSource { get; set; }
 
         /// <summary>
         /// Description of what the argument does.

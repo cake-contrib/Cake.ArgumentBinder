@@ -16,8 +16,8 @@ namespace Cake.ArgumentBinder
 
         // ---------------- Constructor ----------------
 
-        protected BasePathAttribute( string arg ) :
-            base( arg )
+        protected BasePathAttribute( string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
             this.DefaultValue = null;
             this.MustExist = false;

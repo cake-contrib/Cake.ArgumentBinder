@@ -14,7 +14,12 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public FilePathArgumentAttribute( string argumentName ) :
-            base( argumentName )
+            this( argumentName, DefaultArgumentSource )
+        {
+        }
+
+        public FilePathArgumentAttribute( string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
         }
 

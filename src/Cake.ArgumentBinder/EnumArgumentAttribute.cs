@@ -39,7 +39,12 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public EnumArgumentAttribute( Type enumType, string argumentName ) :
-            base( argumentName )
+            this( enumType, argumentName, DefaultArgumentSource )
+        {
+        }
+
+        public EnumArgumentAttribute( Type enumType, string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
             if( enumType.IsEnum == false )
             {

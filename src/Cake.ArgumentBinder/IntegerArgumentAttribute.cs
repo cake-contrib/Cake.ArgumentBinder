@@ -25,7 +25,12 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public IntegerArgumentAttribute( string argumentName ) :
-            base( argumentName )
+            this( argumentName, DefaultArgumentSource )
+        {
+        }
+
+        public IntegerArgumentAttribute( string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
             this.DefaultValue = 0;
             this.Min = 0;

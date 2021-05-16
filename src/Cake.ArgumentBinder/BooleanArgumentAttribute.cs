@@ -20,7 +20,12 @@ namespace Cake.ArgumentBinder
         // ---------------- Constructor ----------------
 
         public BooleanArgumentAttribute( string argumentName ) :
-            base( argumentName )
+            this( argumentName, DefaultArgumentSource )
+        {
+        }
+
+        public BooleanArgumentAttribute( string argumentName, ArgumentSource argumentSource ) :
+            base( argumentName, argumentSource )
         {
             this.DefaultValue = false;
         }

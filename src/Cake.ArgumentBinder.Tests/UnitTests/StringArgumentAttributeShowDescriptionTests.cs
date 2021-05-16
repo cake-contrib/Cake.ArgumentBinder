@@ -42,6 +42,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.TypePrefix}: {typeof( string ).Name}",
                 actualDescription
             );
@@ -81,6 +86,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 argDescription,
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
                 actualDescription
             );
 
@@ -125,6 +135,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.TypePrefix}: {typeof( string ).Name}",
                 actualDescription
             );
@@ -159,6 +174,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 argDescription,
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
                 actualDescription
             );
 
@@ -199,6 +219,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 argDescription,
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
                 actualDescription
             );
 

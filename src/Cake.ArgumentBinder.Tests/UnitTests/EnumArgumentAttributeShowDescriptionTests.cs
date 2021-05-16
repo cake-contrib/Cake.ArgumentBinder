@@ -43,6 +43,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
                 actualDescription
             );
@@ -100,6 +105,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 argDescription,
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
                 actualDescription
             );
 
@@ -165,6 +175,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
                 $"{BaseAttribute.TypePrefix}: {typeof( TestEnum ).Name}",
                 actualDescription
             );
@@ -222,6 +237,11 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
                 argDescription,
+                actualDescription
+            );
+
+            TestHelpers.EnsureLineExistsFromMultiLineString(
+                $"{BaseAttribute.SourcePrefix}: {BaseAttribute.DefaultArgumentSource}",
                 actualDescription
             );
 

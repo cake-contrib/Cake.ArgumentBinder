@@ -26,6 +26,8 @@ namespace Cake.ArgumentBinder
 
         internal static readonly string DefaultArgumentDescription = "(No Description Given)";
 
+        internal static readonly string SourcePrefix = "Source";
+
         // ---------------- Constructor ----------------
 
         protected BaseAttribute( string argumentName, ArgumentSource argumentSource )
@@ -98,6 +100,7 @@ namespace Cake.ArgumentBinder
                 builder.AppendLine( $"\t\t{this.Description}." );
             }
             builder.AppendLine( $"\t\t{TypePrefix}: {this.BaseType.Name}." );
+            builder.AppendLine( $"\t\t{SourcePrefix}: {this.ArgumentSource}." );
             if( this.Required )
             {
                 builder.AppendLine( $"\t\t{RequiredPrefix}: {this.Required}." );

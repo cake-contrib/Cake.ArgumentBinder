@@ -5,6 +5,7 @@
 //
 
 using System;
+using System.Text;
 
 namespace Cake.ArgumentBinder
 {
@@ -15,13 +16,59 @@ namespace Cake.ArgumentBinder
     /// or run-time exceptions will occur.
     /// </summary>
     [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public sealed class BooleanArgumentAttribute : BaseBooleanAttribute, IReadOnlyArgumentAttribute
+    public sealed class BooleanArgumentAttribute : BaseAttribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Constructor ----------------
 
-        public BooleanArgumentAttribute( string arg ) :
-            base( arg )
+        public BooleanArgumentAttribute( string argumentName ) :
+            base( argumentName )
         {
+            this.DefaultValue = false;
+        }
+
+        // ---------------- Properties ----------------
+
+        /// <summary>
+        /// The default value of the argument; defaulted to false.
+        /// </summary>
+        public bool DefaultValue { get; set; }
+
+        protected sealed override object BaseDefaultValue
+        {
+            get
+            {
+                return this.DefaultValue;
+            }
+        }
+
+        internal sealed override Type BaseType
+        {
+            get
+            {
+                return typeof( bool );
+            }
+        }
+
+        // ---------------- Functions ----------------
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            this.ToString( builder );
+
+            return builder.ToString();
+        }
+
+        /// <inheritdoc/>
+        internal override string TryValidate()
+        {
+            StringBuilder builder = new StringBuilder();
+            if( string.IsNullOrWhiteSpace( this.ArgName ) )
+            {
+                builder.AppendLine( nameof( this.ArgName ) + " can not be null, empty, or whitespace." );
+            }
+
+            return builder.ToString();
         }
     }
 }

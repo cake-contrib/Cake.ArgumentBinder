@@ -53,12 +53,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
+                $"{IntegerArgumentAttribute.MinValuePrefix}: {minValue}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
+                $"{IntegerArgumentAttribute.MaxValuePrefix}: {maxValue}",
                 actualDescription
             );
 
@@ -101,12 +101,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {minValue}",
+                $"{IntegerArgumentAttribute.MinValuePrefix}: {minValue}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {maxValue}",
+                $"{IntegerArgumentAttribute.MaxValuePrefix}: {maxValue}",
                 actualDescription
             );
 
@@ -161,12 +161,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{IntegerArgumentAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{IntegerArgumentAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
                 actualDescription
             );
 
@@ -204,12 +204,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{IntegerArgumentAttribute.MinValuePrefix}: {ArgumentBinder.HiddenString}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseIntegerAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
+                $"{IntegerArgumentAttribute.MaxValuePrefix}: {ArgumentBinder.HiddenString}",
                 actualDescription
             );
 

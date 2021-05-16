@@ -4,15 +4,29 @@
 // (See accompanying file LICENSE in the root of the repository).
 //
 
+using System;
+using Cake.Core.IO;
+
 namespace Cake.ArgumentBinder
 {
-    public sealed class FilePathArgumentAttribute : BaseFilePathAttribute, IReadOnlyArgumentAttribute
+    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
+    public sealed class FilePathArgumentAttribute : BasePathAttribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Constructor ----------------
 
-        public FilePathArgumentAttribute( string argumentName ) : 
+        public FilePathArgumentAttribute( string argumentName ) :
             base( argumentName )
         {
+        }
+
+        // ---------------- Properties ----------------
+
+        internal sealed override Type BaseType
+        {
+            get
+            {
+                return typeof( FilePath );
+            }
         }
     }
 }

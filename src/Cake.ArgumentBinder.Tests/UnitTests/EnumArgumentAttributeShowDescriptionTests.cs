@@ -53,12 +53,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseEnumAttribute.CasingIgnorePrefix}: {false}",
+                $"{EnumArgumentAttribute.CasingIgnorePrefix}: {false}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                BaseEnumAttribute.PossibleValuePrefix,
+                EnumArgumentAttribute.PossibleValuePrefix,
                 actualDescription
             );
 
@@ -109,12 +109,12 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseEnumAttribute.CasingIgnorePrefix}: {true}",
+                $"{EnumArgumentAttribute.CasingIgnorePrefix}: {true}",
                 actualDescription
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                BaseEnumAttribute.PossibleValuePrefix,
+                EnumArgumentAttribute.PossibleValuePrefix,
                 actualDescription
             );
 
@@ -180,7 +180,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseEnumAttribute.CasingIgnorePrefix}: {true}",
+                $"{EnumArgumentAttribute.CasingIgnorePrefix}: {true}",
                 actualDescription
             );
 
@@ -192,7 +192,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
-                BaseEnumAttribute.PossibleValuePrefix,
+                EnumArgumentAttribute.PossibleValuePrefix,
                 actualDescription
             );
 
@@ -236,7 +236,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineExistsFromMultiLineString(
-                $"{BaseEnumAttribute.CasingIgnorePrefix}: {false}",
+                $"{EnumArgumentAttribute.CasingIgnorePrefix}: {false}",
                 actualDescription
             );
 
@@ -253,7 +253,7 @@ namespace Cake.ArgumentBinder.Tests.UnitTests
             );
 
             TestHelpers.EnsureLineDoesNotExistFromMultiLineString(
-                BaseEnumAttribute.PossibleValuePrefix,
+                EnumArgumentAttribute.PossibleValuePrefix,
                 actualDescription
             );
 

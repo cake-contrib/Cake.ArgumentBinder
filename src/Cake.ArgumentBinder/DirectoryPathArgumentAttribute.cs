@@ -9,8 +9,7 @@ using Cake.Core.IO;
 
 namespace Cake.ArgumentBinder
 {
-    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public sealed class DirectoryPathArgumentAttribute : BasePathAttribute, IReadOnlyArgumentAttribute
+    public sealed class DirectoryPathArgumentAttribute : BasePathAttribute
     {
         // ---------------- Constructor ----------------
 

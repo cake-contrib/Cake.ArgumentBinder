@@ -15,8 +15,7 @@ namespace Cake.ArgumentBinder
     /// Note that this attribute can only be attached to a property whose type is an int,
     /// or run-time exceptions will occur.
     /// </summary>
-    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public sealed class IntegerArgumentAttribute : BaseAttribute, IReadOnlyArgumentAttribute
+    public sealed class IntegerArgumentAttribute : BaseAttribute
     {
         // ---------------- Fields ----------------
 

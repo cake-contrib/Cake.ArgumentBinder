@@ -27,8 +27,7 @@ namespace Cake.ArgumentBinder
     ///   for an enum, and its the only way we can define a default enum value
     ///   with <see cref="Attribute"/> objects.
     /// </remarks>
-    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
-    public sealed class EnumArgumentAttribute : BaseAttribute, IReadOnlyArgumentAttribute
+    public sealed class EnumArgumentAttribute : BaseAttribute
     {
         // ---------------- Fields ----------------
 

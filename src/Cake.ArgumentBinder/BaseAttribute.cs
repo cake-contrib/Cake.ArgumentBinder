@@ -9,7 +9,8 @@ using System.Text;
 
 namespace Cake.ArgumentBinder
 {
-    public abstract class BaseAttribute : Attribute
+    [AttributeUsage( AttributeTargets.Property, Inherited = true, AllowMultiple = false )]
+    public abstract class BaseAttribute : Attribute, IReadOnlyArgumentAttribute
     {
         // ---------------- Fields ----------------
 

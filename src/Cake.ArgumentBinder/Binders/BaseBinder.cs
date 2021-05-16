@@ -69,12 +69,79 @@ namespace Cake.ArgumentBinder.Binders
 
         protected bool HasArgument( string argumentName, TAttribute attribute )
         {
-            return this.cakeContext.Arguments.HasArgument( argumentName );
+            bool hasCommandLine = this.cakeContext.Arguments.HasArgument( argumentName );
+
+            if( attribute.ArgumentSource == ArgumentSource.CommandLine )
+            {
+                return hasCommandLine;
+            }
+            else
+            {
+                bool hasEnvVar = this.HasEnvironmentVariable( argumentName );
+
+                if( attribute.ArgumentSource == ArgumentSource.EnvironmentVariable )
+                {
+                    return hasEnvVar;
+                }
+                else if(
+                    ( attribute.ArgumentSource == ArgumentSource.CommandLineThenEnvironmentVariable ) ||
+                    ( attribute.ArgumentSource == ArgumentSource.EnvironmentVariableThenCommandLine )
+                )
+                {
+                    return hasCommandLine || hasEnvVar;
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        $"Invalid {nameof( attribute.ArgumentSource )}: {attribute.ArgumentSource}."
+                    );
+                }
+            }
         }
 
         protected string GetArgument( string argumentName, TAttribute attribute )
         {
-            return this.cakeContext.Arguments.GetArgument( argumentName );
+            if( attribute.ArgumentSource == ArgumentSource.CommandLine )
+            {
+                return this.cakeContext.Arguments.GetArgument( argumentName );
+            }
+            else if( attribute.ArgumentSource == ArgumentSource.EnvironmentVariable )
+            {
+                return this.cakeContext.Environment.GetEnvironmentVariable( argumentName );
+            }
+            else if( attribute.ArgumentSource == ArgumentSource.CommandLineThenEnvironmentVariable )
+            {
+                if( this.cakeContext.Arguments.HasArgument( argumentName ) )
+                {
+                    return this.cakeContext.Arguments.GetArgument( argumentName );
+                }
+                else
+                {
+                    return this.cakeContext.Environment.GetEnvironmentVariable( argumentName );
+                }
+            }
+            else if( attribute.ArgumentSource == ArgumentSource.EnvironmentVariableThenCommandLine )
+            {
+                if( this.HasEnvironmentVariable( argumentName ) )
+                {
+                    return this.cakeContext.Environment.GetEnvironmentVariable( argumentName );
+                }
+                else
+                {
+                    return this.cakeContext.Arguments.GetArgument( argumentName );
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Invalid {nameof( attribute.ArgumentSource )}: {attribute.ArgumentSource}."
+                );
+            }
+        }
+
+        private bool HasEnvironmentVariable( string argumentName )
+        {
+            return string.IsNullOrEmpty( this.cakeContext.Environment.GetEnvironmentVariable( argumentName ) ) == false;
         }
 
         /// <param name="instance">The instance to bind to.</param>

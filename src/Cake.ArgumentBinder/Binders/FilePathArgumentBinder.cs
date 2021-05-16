@@ -11,21 +11,18 @@ using Cake.Core.IO;
 
 namespace Cake.ArgumentBinder.Binders
 {
-    internal abstract class BaseFilePathBinder<TInstance, TAttribute> : BaseBinder<TInstance, TAttribute>
-        where TAttribute : BaseFilePathAttribute
+    internal sealed class FilePathArgumentBinder<TInstance> : BaseBinder<TInstance, FilePathArgumentAttribute>
     {
-        // ---------------- Fields ----------------
-
         // ---------------- Constructor ----------------
 
-        protected BaseFilePathBinder( ICakeContext cakeContext ) :
+        public FilePathArgumentBinder( ICakeContext cakeContext ) :
             base( cakeContext )
         {
         }
 
         // ---------------- Functions ----------------
 
-        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, TAttribute attribute )
+        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, FilePathArgumentAttribute attribute )
         {
             string cakeArg;
             if( this.HasArgument( attribute.ArgName ) )
@@ -67,9 +64,5 @@ namespace Cake.ArgumentBinder.Binders
                 value
             );
         }
-
-        protected abstract bool HasArgument( string argumentName );
-
-        protected abstract string GetArgument( string argumentName );
     }
 }

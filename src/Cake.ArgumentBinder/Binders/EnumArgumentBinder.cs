@@ -10,21 +10,18 @@ using Cake.Core;
 
 namespace Cake.ArgumentBinder.Binders
 {
-    internal abstract class BaseEnumBinder<TInstance, TAttribute> : BaseBinder<TInstance, TAttribute>
-        where TAttribute : BaseEnumAttribute
+    internal sealed class EnumArgumentBinder<TInstance> : BaseBinder<TInstance, EnumArgumentAttribute>
     {
-        // ---------------- Fields ----------------
-
         // ---------------- Constructor ----------------
 
-        protected BaseEnumBinder( ICakeContext cakeContext ) :
+        public EnumArgumentBinder( ICakeContext cakeContext ) :
             base( cakeContext )
         {
         }
 
         // ---------------- Functions ----------------
 
-        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, TAttribute attribute )
+        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, EnumArgumentAttribute attribute )
         {
             Enum value = null;
             string cakeArg;
@@ -64,9 +61,5 @@ namespace Cake.ArgumentBinder.Binders
                 value
             );
         }
-
-        protected abstract bool HasArgument( string argumentName );
-
-        protected abstract string GetArgument( string argumentName );
     }
 }

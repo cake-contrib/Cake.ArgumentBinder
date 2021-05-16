@@ -9,21 +9,20 @@ using Cake.Core;
 
 namespace Cake.ArgumentBinder.Binders
 {
-    internal abstract class BaseStringBinder<TInstance, TAttribute> : BaseBinder<TInstance, TAttribute>
-        where TAttribute : BaseStringAttribute
+    internal sealed class StringArgumentBinder<TInstance> : BaseBinder<TInstance, StringArgumentAttribute>
     {
         // ---------------- Fields ----------------
 
         // ---------------- Constructor ----------------
 
-        protected BaseStringBinder( ICakeContext cakeContext ) :
+        public StringArgumentBinder( ICakeContext cakeContext ) :
             base( cakeContext )
         {
         }
 
         // ---------------- Functions ----------------
 
-        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, TAttribute attribute )
+        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, StringArgumentAttribute attribute )
         {
             string cakeArg;
             if( this.HasArgument( attribute.ArgName ) )
@@ -44,9 +43,5 @@ namespace Cake.ArgumentBinder.Binders
                 cakeArg
             );
         }
-
-        protected abstract bool HasArgument( string argumentName );
-
-        protected abstract string GetArgument( string argumentName );
     }
 }

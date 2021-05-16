@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Cake.ArgumentBinder.Binders;
-using Cake.ArgumentBinder.Binders.Argument;
 using Cake.Core;
 
 namespace Cake.ArgumentBinder
@@ -176,37 +175,37 @@ namespace Cake.ArgumentBinder
 
             private void TryStringArguments()
             {
-                ArgumentStringBinder<T> binder = new ArgumentStringBinder<T>( this.cakeContext );
+                StringArgumentBinder<T> binder = new StringArgumentBinder<T>( this.cakeContext );
                 this.DoBind( binder );
             }
 
             private void TryBooleanArguments()
             {
-                ArgumentBooleanBinder<T> binder = new ArgumentBooleanBinder<T>( this.cakeContext );
+                BooleanArgumentBinder<T> binder = new BooleanArgumentBinder<T>( this.cakeContext );
                 this.DoBind( binder );
             }
 
             private void TryIntegerArguments()
             {
-                ArgumentIntegerBinder<T> binder = new ArgumentIntegerBinder<T>( this.cakeContext );
+                IntegerArgumentBinder<T> binder = new IntegerArgumentBinder<T>( this.cakeContext );
                 this.DoBind( binder );
             }
 
             private void TryFilePathArguments()
             {
-                ArgumentFilePathBinder<T> binder = new ArgumentFilePathBinder<T>( this.cakeContext );
+                FilePathArgumentBinder<T> binder = new FilePathArgumentBinder<T>( this.cakeContext );
                 this.DoBind( binder );
             }
 
             private void TryDirectoryPathArguments()
             {
-                ArgumentDirectoryPathBinder<T> binder = new ArgumentDirectoryPathBinder<T>( this.cakeContext );
+                DirectoryPathArgumentBinder<T> binder = new DirectoryPathArgumentBinder<T>( this.cakeContext );
                 this.DoBind( binder );
             }
 
             private void TryEnumAttributes()
             {
-                ArgumentEnumBinder<T> binder = new ArgumentEnumBinder<T>( this.cakeContext );
+                EnumArgumentBinder<T> binder = new EnumArgumentBinder<T>( this.cakeContext );
                 DoBind( binder );
             }
 

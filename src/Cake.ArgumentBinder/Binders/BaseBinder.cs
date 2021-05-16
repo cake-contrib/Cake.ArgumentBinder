@@ -67,6 +67,16 @@ namespace Cake.ArgumentBinder.Binders
             }
         }
 
+        protected bool HasArgument( string argumentName )
+        {
+            return this.cakeContext.Arguments.HasArgument( argumentName );
+        }
+
+        protected string GetArgument( string argumentName )
+        {
+            return this.cakeContext.Arguments.GetArgument( argumentName );
+        }
+
         /// <param name="instance">The instance to bind to.</param>
         /// <param name="propertyInfo">The current property that is being checked.</param>
         /// <param name="attribute">The attribute that contains the argument info.</param>

@@ -9,21 +9,18 @@ using Cake.Core;
 
 namespace Cake.ArgumentBinder.Binders
 {
-    internal abstract class BaseBooleanBinder<TInstance, TAttribute> : BaseBinder<TInstance, TAttribute>
-        where TAttribute : BaseBooleanAttribute
+    internal sealed class BooleanArgumentBinder<TInstance> : BaseBinder<TInstance, BooleanArgumentAttribute>
     {
-        // ---------------- Fields ----------------
-
         // ---------------- Constructor ----------------
 
-        protected BaseBooleanBinder( ICakeContext cakeContext ) :
+        public BooleanArgumentBinder( ICakeContext cakeContext ) :
             base( cakeContext )
         {
         }
 
         // ---------------- Functions ----------------
 
-        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, TAttribute attribute )
+        protected sealed override void BindInternal( TInstance instance, PropertyInfo propertyInfo, BooleanArgumentAttribute attribute )
         {
             bool? value = null;
             string cakeArg;
@@ -55,9 +52,5 @@ namespace Cake.ArgumentBinder.Binders
                 value.Value
             );
         }
-
-        protected abstract bool HasArgument( string argumentName );
-
-        protected abstract string GetArgument( string argumentName );
     }
 }

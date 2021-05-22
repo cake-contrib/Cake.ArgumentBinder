@@ -48,7 +48,8 @@ public class DeleteHelpersConfig
     [StringArgument(
         "path",
         Description = "The path to delete from.",
-        Required = true
+        Required = true,
+        ArgumentSource = ArgumentSource.CommandLineThenEnvironmentVariable
     )]
     public string Directory { get; set; }
 
@@ -63,7 +64,8 @@ public class DeleteHelpersConfig
         Description = "The number of the most recent files/directories to keep that match the pattern.",
         DefaultValue = 0,
         Min = 0,
-        Max = 255
+        Max = 255,
+        ArgumentSource = ArgumentSource.CommandLineThenEnvironmentVariable
     )]
     public int NumberOfFilesToKeep { get; set; }
 
@@ -73,14 +75,16 @@ public class DeleteHelpersConfig
     [StringArgument(
         "pattern",
         Description = "The glob pattern to delete files/directories from.",
-        DefaultValue = "*"
+        DefaultValue = "*",
+        ArgumentSource = ArgumentSource.CommandLineThenEnvironmentVariable
     )]
     public string DeletionPattern { get; set; }
 
     [BooleanArgument(
         "dry_run",
         Description = "Set to 'true' to not delete any files, this will simply print what files will be deleted.",
-        DefaultValue = false
+        DefaultValue = false,
+        ArgumentSource = ArgumentSource.CommandLineThenEnvironmentVariable
     )]
     public bool DryRun { get; set; }
 }
@@ -156,6 +160,14 @@ An error occurred when executing task 'delete_files'.
 Error: One or more errors occurred.
         Value specified in argument 'num_to_keep' is less than the minimum value of '0'.
 ```
+
+You can also specify the source of the argument by setting the "ArgumentSource" property.  There are four options:
+* CommandLine (default) - The value comes from a command-line argument.
+* EnvironmentVariable - The value comes from an environment variable.
+* CommandLineThenEnvironmentVariable - The value first comes from the command-line, but falls back to an environment variable
+                                       if a command-line argument of the given name is not specified.
+* EnvironmentVariableThenCommandLine - The value first comes from an environment variable, but falls back to the command line
+                                       if an environment variable of the given name is not specified.
 
 Best Practices
 --------

@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Cake.ArgumentBinder.Tests.IntegrationTests
 {
     [TestFixture]
-    public class BooleanBindTests
+    public class BooleanEnvironmentVariableThenArgumentBindTests
     {
         // ---------------- Fields ----------------
 
@@ -27,24 +27,61 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
         {
             actualBind = null;
             foundException = null;
+
+            Environment.SetEnvironmentVariable( BooleanBind.RequiredArgName, null );
+            Environment.SetEnvironmentVariable( BooleanBind.OptionalArgName, null );
         }
 
         [TearDown]
         public void TestTeardown()
         {
+            Environment.SetEnvironmentVariable( BooleanBind.RequiredArgName, null );
+            Environment.SetEnvironmentVariable( BooleanBind.OptionalArgName, null );
+
             actualBind = null;
             foundException = null;
         }
 
         // ---------------- Tests ----------------
 
+        /// <summary>
+        /// Ensures if both command line and environment variables are specified,
+        /// environment variable takes priority.
+        /// </summary>
         [Test]
-        public void DoBooleanBindTest()
+        public void DoEnvVarOverridesCommandLineBindTest()
         {
             // Setup
             string[] arguments = new string[]
             {
-                $"--target={nameof( BooleanBindTask )}",
+                $"--target={nameof( BooleanEnvironmentVariableThenArgumentBindTask )}",
+                $"--{BooleanBind.RequiredArgName}={false}",
+                $"--{BooleanBind.OptionalArgName}={false}"
+            };
+
+            Environment.SetEnvironmentVariable( BooleanBind.RequiredArgName, true.ToString() );
+            Environment.SetEnvironmentVariable( BooleanBind.OptionalArgName, true.ToString() );
+
+            // Act
+            CakeFrostingRunner.RunCake( arguments );
+
+            // Check
+            Assert.NotNull( actualBind );
+            Assert.IsTrue( actualBind.RequiredArg );
+            Assert.IsTrue( actualBind.OptionalArg );
+        }
+
+        /// <summary>
+        /// Ensures if no environment variables exist, but command line arguments
+        /// do, the arguments get bounded.
+        /// </summary>
+        [Test]
+        public void DoArgumentBackupTest()
+        {
+            // Setup
+            string[] arguments = new string[]
+            {
+                $"--target={nameof( BooleanEnvironmentVariableThenArgumentBindTask )}",
                 $"--{BooleanBind.RequiredArgName}={true}",
                 $"--{BooleanBind.OptionalArgName}={true}"
             };
@@ -58,15 +95,22 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             Assert.IsTrue( actualBind.OptionalArg );
         }
 
+        /// <summary>
+        /// If optional values are not specified by either
+        /// the command line or environment variable,
+        /// the default value is used.
+        /// </summary>
         [Test]
         public void DoBooleanBindNoOptionalValuesTest()
         {
             // Setup
             string[] arguments = new string[]
             {
-                $"--target={nameof( BooleanBindTask )}",
-                $"--{BooleanBind.RequiredArgName}={false}"
+                $"--target={nameof( BooleanEnvironmentVariableThenArgumentBindTask )}",
+                $"--{BooleanBind.RequiredArgName}={true}"
             };
+
+            Environment.SetEnvironmentVariable( BooleanBind.RequiredArgName, false.ToString() );
 
             // Act
             CakeFrostingRunner.RunCake( arguments );
@@ -77,13 +121,17 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
             Assert.AreEqual( BooleanBind.DefaultValue, actualBind.OptionalArg );
         }
 
+        /// <summary>
+        /// Ensures if a required argument is missing from both the command
+        /// line and environment variable, we get an error.
+        /// </summary>
         [Test]
         public void DoBooleanBindBindRequiredArgMissingTest()
         {
             // Setup
             string[] arguments = new string[]
             {
-                $"--target={nameof( BooleanBindTask )}",
+                $"--target={nameof( BooleanEnvironmentVariableThenArgumentBindTask )}",
             };
 
             // Act
@@ -118,7 +166,8 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
                 RequiredArgName,
                 Description = requiredArgDescription,
                 HasSecretValue = false,
-                Required = true
+                Required = true,
+                ArgumentSource = ArgumentSource.EnvironmentVariableThenCommandLine
             )]
             public bool RequiredArg { get; set; }
 
@@ -127,7 +176,8 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
                 Description = optionalArgDescription,
                 HasSecretValue = false,
                 DefaultValue = DefaultValue,
-                Required = false
+                Required = false,
+                ArgumentSource = ArgumentSource.EnvironmentVariableThenCommandLine
             )]
             public bool OptionalArg { get; set; }
 
@@ -142,8 +192,8 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
         /// <remarks>
         /// Must be public so <see cref="Frosting"/> can find it.
         /// </remarks>
-        [TaskName( nameof( BooleanBindTask ) )]
-        public class BooleanBindTask : BaseFrostingTask
+        [TaskName( nameof( BooleanEnvironmentVariableThenArgumentBindTask ) )]
+        public class BooleanEnvironmentVariableThenArgumentBindTask : BaseFrostingTask
         {
             public override void Run( ICakeContext context )
             {
@@ -153,7 +203,7 @@ namespace Cake.ArgumentBinder.Tests.IntegrationTests
 
             public override void OnError( Exception exception, ICakeContext context )
             {
-                BooleanBindTests.foundException = exception;
+                BooleanEnvironmentVariableThenArgumentBindTests.foundException = exception;
                 base.OnError( exception, context );
             }
         }

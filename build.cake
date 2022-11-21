@@ -103,10 +103,10 @@ Task( buildReleaseTarget )
 .Does(
     () =>
     {
-        msBuildSettings.SetConfiguration( "Release" );
         var settings = new DotNetBuildSettings
         {
-            MSBuildSettings = msBuildSettings
+            MSBuildSettings = msBuildSettings,
+            Configuration = "Release"
         };
         DotNetBuild( sln.ToString(), settings );
     }

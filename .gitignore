@@ -8,3 +8,4 @@ tools/
 dist/
 CodeCoverage/
 .cake/
+.dotnet/

@@ -4,13 +4,14 @@
 
 // ---------------- Tools ----------------
 
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.12.0"
-#tool "nuget:?package=OpenCover&version=4.7.922"
-#tool "nuget:?package=ReportGenerator&version=4.8.7"
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.16.0"
+#tool "nuget:?package=OpenCover&version=4.7.1221"
+#tool "nuget:?package=ReportGenerator&version=5.1.12"
 
 // ---------------- Usings ----------------
 
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 // ---------------- Constants ----------------
 
@@ -31,11 +32,11 @@ DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults
 
 // This is the version of this software,
 // update before making a new release.
-const string version = "1.0.0";
+const string version = "2.0.0";
 
-DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings();
+var msBuildSettings = new DotNetMSBuildSettings();
 
-// Sets filesing's assembly version.
+// Set the assembly version.
 msBuildSettings.WithProperty( "Version", version )
     .WithProperty( "AssemblyVersion", version )
     .SetMaxCpuCount( System.Environment.ProcessorCount )
@@ -48,11 +49,11 @@ Task( buildTarget )
     () =>
     {
         msBuildSettings.SetConfiguration( "Debug" );
-        DotNetCoreBuildSettings settings = new DotNetCoreBuildSettings
+        var settings = new DotNetBuildSettings
         {
             MSBuildSettings = msBuildSettings
         };
-        DotNetCoreBuild( sln.ToString(), settings );
+        DotNetBuild( sln.ToString(), settings );
     }
 ).Description( "Builds the Debug target of Cake.ArgumentBinder" );
 
@@ -65,12 +66,11 @@ Task( unitTestTarget )
             EnsureDirectoryExists( coverageFolder );
             CleanDirectory( coverageFolder );
 
-            OpenCoverSettings settings = new OpenCoverSettings
+            var settings = new OpenCoverSettings
             {
-                Register = "user",
                 ReturnTargetCodeOffset = 0,
                 OldStyle = true // This is needed or MissingMethodExceptions get thrown everywhere for some reason.
-            };
+            }.WithRegisterUser();
             settings.WithFilter( "+[Cake.ArgumentBinder]*" );
 
             FilePath output = coverageFolder.CombineWithFilePath( "coverage.xml" );
@@ -89,14 +89,14 @@ Task( unitTestTarget )
 
 private void RunUnitTests( ICakeContext context )
 {
-    DotNetCoreTestSettings settings = new DotNetCoreTestSettings
+    var settings = new DotNetTestSettings
     {
         NoBuild = true,
         NoRestore = true,
         Configuration = "Debug"
     };
 
-    context.DotNetCoreTest( "./src/Cake.ArgumentBinder.Tests/Cake.ArgumentBinder.Tests.csproj", settings );
+    context.DotNetTest( "./src/Cake.ArgumentBinder.Tests/Cake.ArgumentBinder.Tests.csproj", settings );
 }
 
 Task( buildReleaseTarget )
@@ -104,11 +104,11 @@ Task( buildReleaseTarget )
     () =>
     {
         msBuildSettings.SetConfiguration( "Release" );
-        DotNetCoreBuildSettings settings = new DotNetCoreBuildSettings
+        var settings = new DotNetBuildSettings
         {
             MSBuildSettings = msBuildSettings
         };
-        DotNetCoreBuild( sln.ToString(), settings );
+        DotNetBuild( sln.ToString(), settings );
     }
 ).Description( "Builds with the Release Configuration." )
 .IsDependentOn( unitTestTarget );
@@ -120,7 +120,7 @@ Task( makeDistTarget )
         EnsureDirectoryExists( distFolder );
         CleanDirectory( distFolder );
 
-        DotNetCorePublishSettings settings = new DotNetCorePublishSettings
+        var settings = new DotNetPublishSettings
         {
             OutputDirectory = distFolder,
             NoBuild = true,
@@ -128,7 +128,7 @@ Task( makeDistTarget )
             Configuration = "Release"
         };
 
-        DotNetCorePublish( "./src/Cake.ArgumentBinder/Cake.ArgumentBinder.csproj", settings );
+        DotNetPublish( "./src/Cake.ArgumentBinder/Cake.ArgumentBinder.csproj", settings );
         CopyFile( "./LICENSE", System.IO.Path.Combine( distFolder.ToString(), "License.txt" ) );
         CopyFileToDirectory( "./Readme.md", distFolder );
     }
@@ -139,13 +139,16 @@ Task( nugetPackTarget )
 .Does(
     () =>
     {
-        List<NuSpecContent> files = new List<NuSpecContent>();
+        string targetFramework = DetermineTargetFramework();
+        string targetFrameworkFolder = $"lib/{targetFramework}";
+
+        var files = new List<NuSpecContent>();
 
         files.Add(
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.dll" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -153,7 +156,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.pdb" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -161,7 +164,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.xml" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -177,7 +180,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Readme.md" ),
-                Target = "Readme.md"
+                Target = "docs/Readme.md"
             }
         );
 
@@ -189,7 +192,7 @@ Task( nugetPackTarget )
             }
         );
 
-        NuGetPackSettings settings = new NuGetPackSettings
+        var settings = new NuGetPackSettings
         {
             Version = version,
             BasePath = distFolder,
@@ -212,7 +215,7 @@ Task( "update_license" )
     {
         const string currentLicense =
 @"//
-// Copyright Seth Hendrick 2019-2021.
+// Copyright Seth Hendrick 2019-2022.
 // Distributed under the MIT License.
 // (See accompanying file LICENSE in the root of the repository).
 //
@@ -265,6 +268,47 @@ Task( "update_license" )
         UpdateLicenseHeaders( files, settings );
     }
 );
+
+string DetermineTargetFramework()
+{
+    FilePath csProj = File( "./src/Cake.ArgumentBinder/Cake.ArgumentBinder.csproj" );
+    XDocument doc = XDocument.Load( csProj.FullPath );
+
+    var root = doc.Root;
+    if( root is null )
+    {
+        throw new InvalidOperationException(
+            "Unable to parse csproj,  Root is null."
+        );
+    }
+    foreach( XElement projectChild in root.Elements() )
+    {
+        string projectChildName = projectChild.Name.LocalName;
+        if( string.IsNullOrWhiteSpace( projectChildName ) )
+        {
+            continue;
+        }
+        else if( "PropertyGroup".Equals( projectChildName ) )
+        {
+            foreach( XElement propertyGroup in projectChild.Elements() )
+            {
+                string propertyGroupName = propertyGroup.Name.LocalName;
+                if( string.IsNullOrWhiteSpace( propertyGroupName ) )
+                {
+                    continue;
+                }
+                else if( "TargetFramework".Equals( propertyGroupName ) )
+                {
+                    return propertyGroup.Value;
+                }
+            }
+        }
+    }
+
+    throw new InvalidOperationException(
+        "Unable to parse TargetFramework from csproj"
+    );
+}
 
 Task( "appveyor" )
 .Description( "Runs all of the tasks needed for AppVeyor" )

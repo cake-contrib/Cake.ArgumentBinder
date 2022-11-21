@@ -5,7 +5,7 @@
 //
 
 // For binding arguments.
-#addin nuget:?package=Cake.ArgumentBinder&version=0.3.0
+#addin nuget:?package=Cake.ArgumentBinder&version=2.0.0
 
 using System;
 using System.Linq;

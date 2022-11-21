@@ -11,6 +11,7 @@
 // ---------------- Usings ----------------
 
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 // ---------------- Constants ----------------
 
@@ -33,9 +34,9 @@ DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults
 // update before making a new release.
 const string version = "2.0.0";
 
-DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings();
+var msBuildSettings = new DotNetMSBuildSettings();
 
-// Sets filesing's assembly version.
+// Set the assembly version.
 msBuildSettings.WithProperty( "Version", version )
     .WithProperty( "AssemblyVersion", version )
     .SetMaxCpuCount( System.Environment.ProcessorCount )
@@ -138,13 +139,16 @@ Task( nugetPackTarget )
 .Does(
     () =>
     {
+        string targetFramework = DetermineTargetFramework();
+        string targetFrameworkFolder = $"lib/{targetFramework}";
+
         var files = new List<NuSpecContent>();
 
         files.Add(
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.dll" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -152,7 +156,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.pdb" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -160,7 +164,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Cake.ArgumentBinder.xml" ),
-                Target = "lib/netstandard2.0" 
+                Target = targetFrameworkFolder
             }
         );
 
@@ -176,7 +180,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Readme.md" ),
-                Target = "Readme.md"
+                Target = "docs/Readme.md"
             }
         );
 
@@ -264,6 +268,47 @@ Task( "update_license" )
         UpdateLicenseHeaders( files, settings );
     }
 );
+
+string DetermineTargetFramework()
+{
+    FilePath csProj = File( "./src/Cake.ArgumentBinder/Cake.ArgumentBinder.csproj" );
+    XDocument doc = XDocument.Load( csProj.FullPath );
+
+    var root = doc.Root;
+    if( root is null )
+    {
+        throw new InvalidOperationException(
+            "Unable to parse csproj,  Root is null."
+        );
+    }
+    foreach( XElement projectChild in root.Elements() )
+    {
+        string projectChildName = projectChild.Name.LocalName;
+        if( string.IsNullOrWhiteSpace( projectChildName ) )
+        {
+            continue;
+        }
+        else if( "PropertyGroup".Equals( projectChildName ) )
+        {
+            foreach( XElement propertyGroup in projectChild.Elements() )
+            {
+                string propertyGroupName = propertyGroup.Name.LocalName;
+                if( string.IsNullOrWhiteSpace( propertyGroupName ) )
+                {
+                    continue;
+                }
+                else if( "TargetFramework".Equals( propertyGroupName ) )
+                {
+                    return propertyGroup.Value;
+                }
+            }
+        }
+    }
+
+    throw new InvalidOperationException(
+        "Unable to parse TargetFramework from csproj"
+    );
+}
 
 Task( "appveyor" )
 .Description( "Runs all of the tasks needed for AppVeyor" )

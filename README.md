@@ -187,7 +187,7 @@ For questions and to discuss ideas & feature requests, use the [GitHub discussio
 
 Versioning
 --------
-Cake.ArgumentBinder's verioning isn't quite semantic verioning.  Rather, the major version (x in x.y.z) is the verion of cake the library was compiled against.  For example, if Cake.ArgumentBinder has a dependency on Cake version 2.0.0, the Cake.ArgumentBinder's version would be 2.y.z.  The minor version (y in x.y.z) will be incremented when a new feature gets added.  The patch (z in x.y.z) will be incremented when a bug fix happens.  We'll try to keep breaking backwards compatiblity to a minimum, and only when a new major version of Cake is released.
+Cake.ArgumentBinder's versioning isn't quite semantic verioning.  Rather, the major version (x in x.y.z) is the version of cake the library was compiled against.  For example, if Cake.ArgumentBinder has a dependency on Cake version 2.0.0, the Cake.ArgumentBinder's version would be 2.y.z.  The minor version (y in x.y.z) will be incremented when a new feature gets added.  The patch (z in x.y.z) will be incremented when a bug fix happens.  We'll try to keep breaking backwards compatibility  to a minimum, and only when a new major version of Cake is released.
 
 License
 --------

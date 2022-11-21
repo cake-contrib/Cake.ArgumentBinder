@@ -6,7 +6,7 @@
 >
   <metadata>
     <dependencies>
-      <group targetFramework="netcoreapp3.1"/>
+      <group targetFramework="net6.0"/>
     </dependencies>
     <id>Cake.ArgumentBinder</id>
     <version>0.0.0</version> <!-- Set during build. -->

@@ -31,7 +31,7 @@ DirectoryPath testResultFolder = MakeAbsolute( new DirectoryPath( "./TestResults
 
 // This is the version of this software,
 // update before making a new release.
-const string version = "0.6.0";
+const string version = "1.0.0";
 
 DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings();
 

@@ -180,7 +180,7 @@ Task( nugetPackTarget )
             new NuSpecContent
             { 
                 Source = System.IO.Path.Combine( distFolder.ToString(), "Readme.md" ),
-                Target = "docs/Readme.md"
+                Target = "Readme.md"
             }
         );
 
